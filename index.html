@@ -10,57 +10,55 @@
     body {
       margin: 0;
       padding: 16px;
-      background: #fffdf7;
+      background: #f7f7f7;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .sketch-card {
-      position: relative;
-      background: #fffdf7;
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 20px;
-      filter: url(#rougher);
-      border: 3px solid #222;
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
-    .sketch-card::before {
-      content: "";
-      position: absolute;
-      inset: -6px;
-      border: 2px solid #222;
-      border-radius: 22px;
-      filter: url(#rougher);
-      pointer-events: none;
+    .rank {
+      font-weight: bold;
+      font-size: 14px;
+      color: #666;
     }
 
     .image-box {
       height: 120px;
-      border: 3px dashed #aaa;
-      border-radius: 14px;
+      background: #eee;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #aaa;
       margin: 12px 0;
     }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #777;
+    }
   </style>
 </head>
 <body>
 
-<svg width="0" height="0">
-  <filter id="rougher">
-    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="8"/>
-    <feDisplacementMap in="SourceGraphic" scale="8"/>
-  </filter>
-</svg>
-
-<div class="sketch-card">
-  <div style="font-weight:bold;">1위</div>
-  <div class="image-box">image</div>
-  <div style="font-size:17px; font-weight:bold;">상품 이름</div>
-  <div style="font-size:14px; color:#555;">상품 설명</div>
-</div>
+  <div class="card">
+    <div class="rank">1위</div>
+    <div class="image-box">image</div>
+    <div class="title">상품 이름</div>
+    <div class="desc">상품 설명</div>
+  </div>
 
 </body>
 </html>
