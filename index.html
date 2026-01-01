@@ -17,27 +17,15 @@
     .sketch-card {
       position: relative;
       background: #fffdf7;
-      border: 2px solid #222;
       border-radius: 18px;
-      padding: 14px;
-      box-shadow: 3px 3px 0 #222;
-      margin-bottom: 16px;
-      transform: rotate(-0.5deg);
-    }
-
-    .sketch-card::before {
-      content: "";
-      position: absolute;
-      inset: -4px;
-      border: 2px dashed #222;
-      border-radius: 20px;
-      transform: rotate(1deg);
-      pointer-events: none;
+      padding: 16px;
+      margin-bottom: 18px;
+      filter: url(#rough);
     }
 
     .image-box {
       height: 120px;
-      border: 2px dashed #999;
+      border: 2px dashed #aaa;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -49,12 +37,19 @@
 </head>
 <body>
 
-  <div class="sketch-card">
-    <div style="font-weight:bold;">1위</div>
-    <div class="image-box">image</div>
-    <div style="font-size:16px; font-weight:bold;">상품 이름</div>
-    <div style="font-size:14px; color:#555;">상품 설명</div>
-  </div>
+<svg width="0" height="0">
+  <filter id="rough">
+    <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" scale="3"/>
+  </filter>
+</svg>
+
+<div class="sketch-card" style="border:2px solid #222;">
+  <div style="font-weight:bold;">1위</div>
+  <div class="image-box">image</div>
+  <div style="font-size:16px; font-weight:bold;">상품 이름</div>
+  <div style="font-size:14px; color:#555;">상품 설명</div>
+</div>
 
 </body>
 </html>
