@@ -24,14 +24,19 @@
       font-size: 16px;
     }
 
+    .outer-frame {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+    }
+
     .frame {
       flex: 1;
       background: #ffffff;
-      margin: 12px;
       border-radius: 16px;
+      border: 2px solid #000;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
       justify-content: center;
       align-items: center;
     }
@@ -52,8 +57,10 @@
 
 <header>MBR</header>
 
-<div class="frame">
-  <button class="add-btn">+</button>
+<div class="outer-frame">
+  <div class="frame">
+    <button class="add-btn">+</button>
+  </div>
 </div>
 
 </body>
