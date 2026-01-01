@@ -17,39 +17,4 @@
     .sketch-card {
       position: relative;
       background: #fffdf7;
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 18px;
-      filter: url(#rough);
-    }
-
-    .image-box {
-      height: 120px;
-      border: 2px dashed #aaa;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #aaa;
-      margin: 10px 0;
-    }
-  </style>
-</head>
-<body>
-
-<svg width="0" height="0">
-  <filter id="rough">
-    <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2"/>
-    <feDisplacementMap in="SourceGraphic" scale="3"/>
-  </filter>
-</svg>
-
-<div class="sketch-card" style="border:2px solid #222;">
-  <div style="font-weight:bold;">1위</div>
-  <div class="image-box">image</div>
-  <div style="font-size:16px; font-weight:bold;">상품 이름</div>
-  <div style="font-size:14px; color:#555;">상품 설명</div>
-</div>
-
-</body>
-</html>
+      border-radius: 20px;
