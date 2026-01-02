@@ -18,6 +18,7 @@
         <div class="frame side-frame"></div>
 
         <div class="frame main-frame">
+          <div class="item-list" id="itemList"></div>
           <button class="add-btn" id="openPopup">＋</button>
         </div>
 
@@ -28,10 +29,10 @@
     <!-- 아이템 추가 팝업 -->
     <div class="popup-overlay" id="popup">
       <div class="popup-card">
-        <input type="text" placeholder="Product Name">
-        <input type="number" placeholder="Price">
-        <textarea placeholder="Memo"></textarea>
-        <input type="file">
+        <input type="text" id="productName" placeholder="Product Name">
+        <input type="text" id="price" placeholder="Price">
+        <textarea id="memo" placeholder="Memo"></textarea>
+        <input type="file" id="image">
 
         <div class="popup-actions">
           <button id="addItemBtn">Add</button>
