@@ -1,46 +1,51 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.getElementById("openPopup");
-  const closeBtn = document.getElementById("closePopup");
-  const addBtn = document.getElementById("addItemBtn");
-  const popup = document.getElementById("popup");
-  const itemList = document.getElementById("itemList");
+let editTarget = null;
 
-  openBtn.addEventListener("click", () => {
-    popup.style.display = "flex";
-  });
+document.addEventListener("DOMContentLoaded",()=>{
+  const popup=document.getElementById("popup");
+  const openBtn=document.getElementById("openPopup");
+  const closeBtn=document.getElementById("closePopup");
+  const addBtn=document.getElementById("addItemBtn");
+  const deleteBtn=document.getElementById("deleteItemBtn");
+  const list=document.getElementById("itemList");
 
-  closeBtn.addEventListener("click", () => {
-    popup.style.display = "none";
-  });
+  openBtn.onclick=()=>{ popup.style.display="flex"; editTarget=null; deleteBtn.style.display="none"; };
+  closeBtn.onclick=()=>popup.style.display="none";
 
-  addBtn.addEventListener("click", () => {
-    const name = document.getElementById("productName").value;
-    const price = document.getElementById("price").value;
-    const memo = document.getElementById("memo").value;
-    const imageInput = document.getElementById("image");
+  addBtn.onclick=()=>{
+    const name=productName.value;
+    const price=price.value;
+    const memo=memo.value;
+    const file=image.files[0];
 
-    const card = document.createElement("div");
-    card.className = "item-card";
+    let card = editTarget || document.createElement("div");
+    card.className="item-card";
+    card.innerHTML="";
 
-    if (imageInput.files[0]) {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(imageInput.files[0]);
-      card.appendChild(img);
-    }
+    const edit=document.createElement("div");
+    edit.textContent="✎ 수정";
+    edit.className="edit-btn";
+    edit.onclick=()=>openEdit(card,name,price,memo,file);
+    card.appendChild(edit);
 
-    const nameDiv = document.createElement("div");
-    nameDiv.textContent = name;
-    card.appendChild(nameDiv);
+    if(file){ const img=document.createElement("img"); img.src=URL.createObjectURL(file); card.appendChild(img);}
+    ["name","price","memo"].forEach(v=>{
+      const d=document.createElement("div");
+      d.textContent=eval(v);
+      card.appendChild(d);
+    });
 
-    const priceDiv = document.createElement("div");
-    priceDiv.textContent = price;
-    card.appendChild(priceDiv);
+    if(!editTarget) list.appendChild(card);
+    popup.style.display="none";
+  };
 
-    const memoDiv = document.createElement("div");
-    memoDiv.textContent = memo;
-    card.appendChild(memoDiv);
+  deleteBtn.onclick=()=>{
+    if(editTarget) editTarget.remove();
+    popup.style.display="none";
+  };
 
-    itemList.appendChild(card);
-    popup.style.display = "none";
-  });
+  function openEdit(card){
+    editTarget=card;
+    deleteBtn.style.display="block";
+    popup.style.display="flex";
+  }
 });
