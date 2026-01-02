@@ -1,142 +1,119 @@
-let editTarget=null;
-
-const popup=document.getElementById("popup");
-const list=document.getElementById("itemList");
-const rankInput=document.getElementById("rank");
-const productName=document.getElementById("productName");
-const price=document.getElementById("price");
-const memo=document.getElementById("memo");
-const image=document.getElementById("image");
-const deleteBtn=document.getElementById("deleteItemBtn");
-
-document.getElementById("openPopup").onclick=()=>{
-  popup.style.display="flex";
-  editTarget=null;
-  deleteBtn.style.display="none";
-  clearInputs();
+let categories = {
+  "Default": []
 };
 
-document.getElementById("closePopup").onclick=()=>popup.style.display="none";
+let currentCategory = "Default";
+let editingIndex = null;
 
-document.getElementById("addItemBtn").onclick=()=>{
-  if(!rankInput.value||!productName.value)
-    return alert("Rank와 Product Name은 필수입니다.");
+const navBtn = document.querySelector(".nav-btn");
+const navPanel = document.querySelector(".nav-panel");
+const navClose = document.querySelector(".nav-close");
+const navList = document.querySelector(".nav-list");
+const frameTitle = document.querySelector(".frame-title");
 
-  if([...document.querySelectorAll(".item-card")]
-    .some(c=>c.dataset.rank===rankInput.value&&c!==editTarget))
-    return alert("Rank가 중복되었습니다.");
+const addBtn = document.querySelector(".add-btn");
+const popup = document.querySelector(".popup-overlay");
+const saveBtn = document.querySelector(".save-btn");
+const cancelBtn = document.querySelector(".cancel-btn");
 
-  let card=editTarget||document.createElement("div");
-  card.className="item-card";
-  card.dataset.rank=rankInput.value;
+const inputRank = document.querySelector("#input-rank");
+const inputTitle = document.querySelector("#input-title");
+const inputMemo = document.querySelector("#input-memo");
 
-  card.innerHTML=`
-    <div class="edit-btn">✎ 수정</div>
-    <div class="rank-badge">#${rankInput.value}</div>
-    <div>${productName.value}</div>
-    <div>${price.value}</div>
-    <div class="memo-text">${memo.value}</div>
-  `;
+const itemList = document.querySelector(".item-list");
 
-  if(image.files[0]){
-    const img=document.createElement("img");
-    img.src=URL.createObjectURL(image.files[0]);
-    card.appendChild(img);
-  }
+/* ---------- NAVIGATION ---------- */
 
-  card.querySelector(".edit-btn").onclick=()=>openEdit(card);
-
-  if(!editTarget) list.appendChild(card);
-  sortItems();
-  popup.style.display="none";
-};
-
-deleteBtn.onclick=()=>{
-  if(editTarget) editTarget.remove();
-  popup.style.display="none";
-};
-
-function openEdit(card){
-  editTarget=card;
-  rankInput.value=card.dataset.rank;
-  productName.value=card.children[2].textContent;
-  price.value=card.children[3].textContent;
-  memo.value=card.children[4].textContent;
-  deleteBtn.style.display="block";
-  popup.style.display="flex";
-}
-
-function sortItems(){
-  [...list.children]
-  .sort((a,b)=>a.dataset.rank-b.dataset.rank)
-  .forEach(c=>list.appendChild(c));
-}
-
-function clearInputs(){
-  rankInput.value="";
-  productName.value="";
-  price.value="";
-  memo.value="";
-  image.value="";
-}
-
-let categories=["Default"];
-let currentCategory="Default";
-let data={ Default:[] };
-
-const navPanel=document.getElementById("navPanel");
-const openNav=document.getElementById("openNav");
-const closeNav=document.getElementById("closeNav");
-const categoryList=document.getElementById("categoryList");
-const addCategoryBtn=document.getElementById("addCategoryBtn");
-
-openNav.onclick=()=>navPanel.classList.add("open");
-closeNav.onclick=()=>navPanel.classList.remove("open");
-
-function renderCategories(){
-categoryList.innerHTML="";
-categories.forEach(cat=>{
-const div=document.createElement("div");
-div.className="category-item";
-div.textContent=cat;
-div.onclick=()=>{
-currentCategory=cat;
-renderItems();
-navPanel.classList.remove("open");
-};
-categoryList.appendChild(div);
+navBtn.addEventListener("click", () => {
+  navPanel.classList.add("open");
 });
+
+navClose.addEventListener("click", () => {
+  navPanel.classList.remove("open");
+});
+
+function renderNav(){
+  navList.innerHTML = "";
+  Object.keys(categories).forEach(cat=>{
+    const btn = document.createElement("button");
+    btn.className = "nav-category";
+    btn.textContent = cat;
+    btn.onclick = () => {
+      currentCategory = cat;
+      frameTitle.textContent = cat;
+      navPanel.classList.remove("open");
+      renderItems();
+    };
+    navList.appendChild(btn);
+  });
 }
 
-addCategoryBtn.onclick=()=>{
-if(categories.length>=5) return alert("카테고리는 최대 5개입니다.");
-const name=prompt("카테고리 이름");
-if(!name||categories.includes(name)) return;
-categories.push(name);
-data[name]=[];
-renderCategories();
-};
+/* ---------- ITEMS ---------- */
 
 function renderItems(){
-itemList.innerHTML="";
-(data[currentCategory]||[])
-.sort((a,b)=>a.rank-b.rank)
-.forEach(item=>{
-const card=document.createElement("div");
-card.className="item-card";
-card.innerHTML=`<div class="edit-btn">✎ 수정</div>
-<div class="rank-badge">#${item.rank}</div>
-<div>${item.name}</div>
-<div class="memo-text">${item.memo}</div>`;
-if(item.img){
-const img=document.createElement("img");
-img.src=item.img;
-card.appendChild(img);
+  itemList.innerHTML = "";
+  const sorted = [...categories[currentCategory]].sort((a,b)=>a.rank-b.rank);
+  sorted.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `
+      <div style="font-size:20px;font-weight:600;">${item.rank}등</div>
+      <div>${item.title}</div>
+      <div>${item.memo}</div>
+      <div class="edit-btn">수정</div>
+    `;
+    card.querySelector(".edit-btn").onclick = ()=>{
+      editingIndex = idx;
+      inputRank.value = item.rank;
+      inputTitle.value = item.title;
+      inputMemo.value = item.memo;
+      popup.classList.add("open");
+    };
+    itemList.appendChild(card);
+  });
 }
-itemList.appendChild(card);
+
+/* ---------- ADD ITEM ---------- */
+
+addBtn.addEventListener("click",()=>{
+  editingIndex = null;
+  inputRank.value="";
+  inputTitle.value="";
+  inputMemo.value="";
+  popup.classList.add("open");
 });
-}
 
-renderCategories();
+cancelBtn.addEventListener("click",()=>{
+  popup.classList.remove("open");
+});
+
+/* ---------- SAVE ---------- */
+
+saveBtn.addEventListener("click",()=>{
+  const rank = Number(inputRank.value);
+  if(categories[currentCategory].some(i=>i.rank===rank && editingIndex===null)){
+    alert("이미 사용된 순위입니다.");
+    return;
+  }
+
+  const data = {
+    rank,
+    title: inputTitle.value,
+    memo: inputMemo.value
+  };
+
+  if(editingIndex===null){
+    categories[currentCategory].push(data);
+  }else{
+    categories[currentCategory][editingIndex] = data;
+  }
+
+  popup.classList.remove("open");
+  renderItems();
+});
+
+/* ---------- INIT ---------- */
+
+renderNav();
+frameTitle.textContent = currentCategory;
 renderItems();
-
