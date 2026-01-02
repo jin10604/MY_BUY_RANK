@@ -80,3 +80,63 @@ function clearInputs(){
   image.value="";
 }
 
+let categories=["Default"];
+let currentCategory="Default";
+let data={ Default:[] };
+
+const navPanel=document.getElementById("navPanel");
+const openNav=document.getElementById("openNav");
+const closeNav=document.getElementById("closeNav");
+const categoryList=document.getElementById("categoryList");
+const addCategoryBtn=document.getElementById("addCategoryBtn");
+
+openNav.onclick=()=>navPanel.classList.add("open");
+closeNav.onclick=()=>navPanel.classList.remove("open");
+
+function renderCategories(){
+categoryList.innerHTML="";
+categories.forEach(cat=>{
+const div=document.createElement("div");
+div.className="category-item";
+div.textContent=cat;
+div.onclick=()=>{
+currentCategory=cat;
+renderItems();
+navPanel.classList.remove("open");
+};
+categoryList.appendChild(div);
+});
+}
+
+addCategoryBtn.onclick=()=>{
+if(categories.length>=5) return alert("카테고리는 최대 5개입니다.");
+const name=prompt("카테고리 이름");
+if(!name||categories.includes(name)) return;
+categories.push(name);
+data[name]=[];
+renderCategories();
+};
+
+function renderItems(){
+itemList.innerHTML="";
+(data[currentCategory]||[])
+.sort((a,b)=>a.rank-b.rank)
+.forEach(item=>{
+const card=document.createElement("div");
+card.className="item-card";
+card.innerHTML=`<div class="edit-btn">✎ 수정</div>
+<div class="rank-badge">#${item.rank}</div>
+<div>${item.name}</div>
+<div class="memo-text">${item.memo}</div>`;
+if(item.img){
+const img=document.createElement("img");
+img.src=item.img;
+card.appendChild(img);
+}
+itemList.appendChild(card);
+});
+}
+
+renderCategories();
+renderItems();
+
