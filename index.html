@@ -4,126 +4,198 @@
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
 <style>
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{margin:0;background:#e1e3e6;height:100vh;display:flex;justify-content:center;align-items:center}
+body {
+  margin:0;
+  font-family:'Avenir Next', sans-serif;
+  background:#EFF2F9;
+}
 
-.app{
-  width:380px;height:720px;
-  background:rgba(255,255,255,0.35);
+.app {
+  width:390px;
+  height:780px;
+  margin:30px auto;
+  background:#E4EBF1;
   border-radius:30px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
-  position:relative;overflow:hidden;
+  box-shadow: 20px 20px 40px rgba(22,27,29,0.15), -20px -20px 40px #FAFBFF;
+  position:relative;
+  overflow:hidden;
 }
 
-/* header */
+/* Header */
 .header{
-  height:64px;margin:20px;
-  background:rgba(255,255,255,.6);
+  height:60px;
+  margin:15px;
+  background:#EFF2F9;
   border-radius:20px;
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:0 20px;
+  box-shadow: 10px 10px 20px rgba(22,27,29,0.15), -10px -10px 20px #FAFBFF;
 }
-.menu-btn{font-size:22px;cursor:pointer}
 
-/* frame */
-.frame{
-  margin:20px;height:560px;
-  background:rgba(255,255,255,.45);
-  border-radius:26px;
-  padding:20px;
-  display:flex;flex-direction:column;
-}
-.items{flex:1;display:flex;flex-direction:column;gap:14px}
-
-/* buttons */
-.btn{
-  border:none;border-radius:18px;
-  padding:14px;background:#fff;
+.header button{
+  border:none;
+  background:none;
+  font-size:22px;
   cursor:pointer;
 }
 
-/* popup */
-.popup-bg{
-  position:absolute;inset:0;
-  background:rgba(0,0,0,.25);
-  display:none;align-items:center;justify-content:center;
-}
-.popup{
-  width:85%;
-  background:#fff;border-radius:26px;
-  padding:20px;display:flex;flex-direction:column;gap:12px;
-}
-.popup input,.popup textarea{
-  border:none;border-radius:14px;padding:12px;background:#f3f5f8;
+/* Item area */
+.items{
+  margin:20px;
+  display:grid;
+  gap:15px;
 }
 
-/* nav */
+.item-card{
+  background:#EFF2F9;
+  border-radius:18px;
+  padding:15px;
+  box-shadow: inset 6px 6px 12px rgba(22,27,29,0.15),
+              inset -6px -6px 12px #FAFBFF;
+}
+
+/* Add Item */
+.add-item{
+  position:absolute;
+  bottom:20px;
+  left:20px;
+  right:20px;
+  height:50px;
+  border-radius:20px;
+  background:#EFF2F9;
+  box-shadow: 10px 10px 20px rgba(22,27,29,0.15), -10px -10px 20px #FAFBFF;
+  border:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* Navigation */
 .nav{
-  position:absolute;top:0;right:-100%;
-  width:80%;height:100%;
-  background:#f7f8fa;
+  position:absolute;
+  top:0;
+  right:-260px;
+  width:260px;
+  height:100%;
+  background:#EFF2F9;
+  box-shadow:-10px 0 20px rgba(22,27,29,0.15);
   padding:20px;
   transition:.3s;
 }
-.nav.show{right:0}
+
+.nav.open{ right:0; }
+
+.nav button{
+  width:100%;
+  height:45px;
+  border:none;
+  border-radius:16px;
+  margin-bottom:10px;
+  background:#EFF2F9;
+  box-shadow: 6px 6px 12px rgba(22,27,29,0.15), -6px -6px 12px #FAFBFF;
+  cursor:pointer;
+}
+
+/* Popup */
+.popup{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.2);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.popup-content{
+  width:300px;
+  background:#EFF2F9;
+  border-radius:25px;
+  padding:20px;
+  box-shadow: 15px 15px 30px rgba(22,27,29,0.15), -15px -15px 30px #FAFBFF;
+}
+
+.popup-content input, .popup-content textarea{
+  width:100%;
+  margin-bottom:12px;
+  padding:12px;
+  border:none;
+  border-radius:15px;
+  background:#EFF2F9;
+  box-shadow: inset 6px 6px 12px rgba(22,27,29,0.15),
+              inset -6px -6px 12px #FAFBFF;
+}
+
+.popup-content button{
+  width:100%;
+  height:45px;
+  border:none;
+  border-radius:15px;
+  background:#EFF2F9;
+  box-shadow: 6px 6px 12px rgba(22,27,29,0.15), -6px -6px 12px #FAFBFF;
+  cursor:pointer;
+}
 </style>
 </head>
+
 <body>
-
 <div class="app">
-
   <div class="header">
-    <strong>My Buy Rank</strong>
-    <div class="menu-btn" onclick="openNav()">☰</div>
+    <div>My Buy Rank</div>
+    <button onclick="toggleNav()">≡</button>
   </div>
 
-  <div class="frame">
-    <div class="items" id="items"></div>
-    <button class="btn" onclick="openPopup()">+ Add Item</button>
+  <div class="items" id="items"></div>
+  <button class="add-item" onclick="openItemPopup()">+</button>
+
+  <div class="nav" id="nav">
+    <button onclick="toggleNav()">Close</button>
+    <button onclick="openCategoryPopup()">+ Add Category</button>
   </div>
 
-  <!-- popup -->
-  <div class="popup-bg" id="popupBg">
-    <div class="popup">
-      <input id="pName" placeholder="Product name">
-      <input id="pPrice" placeholder="Price">
-      <textarea id="pMemo" placeholder="Memo"></textarea>
-      <button class="btn" onclick="addItem()">Add</button>
-      <button class="btn" onclick="closePopup()">Cancel</button>
+  <!-- Item Popup -->
+  <div class="popup" id="itemPopup">
+    <div class="popup-content">
+      <input id="itemName" placeholder="Product Name">
+      <input id="itemPrice" placeholder="Price">
+      <textarea id="itemMemo" placeholder="Memo"></textarea>
+      <button onclick="addItem()">Add</button>
     </div>
   </div>
 
-  <!-- nav -->
-  <div class="nav" id="nav">
-    <button class="btn" onclick="closeNav()">Close</button>
-    <button class="btn">+ Add Category</button>
+  <!-- Category Popup -->
+  <div class="popup" id="categoryPopup">
+    <div class="popup-content">
+      <input id="categoryName" placeholder="Category Name">
+      <button onclick="closeCategory()">Add Category</button>
+    </div>
   </div>
-
 </div>
 
 <script>
-const popupBg=document.getElementById("popupBg");
-const items=document.getElementById("items");
-const nav=document.getElementById("nav");
+let nav = document.getElementById('nav');
+let items = document.getElementById('items');
 
-function openPopup(){popupBg.style.display="flex"}
-function closePopup(){popupBg.style.display="none"}
+function toggleNav(){ nav.classList.toggle('open'); }
+
+function openItemPopup(){ document.getElementById('itemPopup').style.display='flex'; }
+function openCategoryPopup(){ document.getElementById('categoryPopup').style.display='flex'; }
 
 function addItem(){
-  if(items.children.length>=6) return alert("Maximum 6 items");
-  const name=pName.value.trim();
+  if(items.children.length >= 6) return alert('Max 6 items');
+  const name = itemName.value;
   if(!name) return;
-  const div=document.createElement("div");
-  div.className="btn";
-  div.textContent=name;
+  let div = document.createElement('div');
+  div.className='item-card';
+  div.innerText=name;
   items.appendChild(div);
-  pName.value=pPrice.value=pMemo.value="";
-  closePopup();
+  itemPopup.style.display='none';
+  itemName.value=itemPrice.value=itemMemo.value='';
 }
 
-function openNav(){nav.classList.add("show")}
-function closeNav(){nav.classList.remove("show")}
+function closeCategory(){
+  categoryPopup.style.display='none';
+}
 </script>
-
 </body>
 </html>
