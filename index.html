@@ -3,48 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>MY BUY RANK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
 
-  <header class="header">
-    <button class="nav-btn" id="openNav">☰</button>
+  <!-- HEADER -->
+  <div class="header">
+    <button class="nav-btn">≡</button>
     <h1>MY BUY RANK</h1>
-  </header>
-
-  <!-- Right Navigation -->
-  <div class="nav-panel" id="navPanel">
-    <button class="nav-btn" id="closeNav">☰</button>
-    <div class="category-list" id="categoryList"></div>
-    <button class="add-category" id="addCategoryBtn">+ Category</button>
   </div>
 
-  <div class="frame-mask">
-    <div class="frame-track">
-      <div class="frame side-frame"></div>
-
-      <div class="frame main-frame">
-        <div class="item-list" id="itemList"></div>
-        <button class="add-btn" id="openPopup">＋</button>
-      </div>
-
-      <div class="frame side-frame"></div>
+  <!-- NAV PANEL -->
+  <div class="nav-panel">
+    <button class="nav-close">✕</button>
+    <div class="nav-list">
+      <button class="nav-category" data-category="Default">Default</button>
+      <button class="nav-category" data-category="여행">여행</button>
+      <button class="nav-category" data-category="전자기기">전자기기</button>
     </div>
   </div>
 
-  <!-- Item Popup -->
-  <div class="popup-overlay" id="popup">
+  <!-- FRAME -->
+  <div class="frame-mask">
+    <div class="frame-track">
+
+      <div class="frame main-frame">
+        <div class="frame-title" id="currentCategoryTitle">Default</div>
+
+        <div class="item-list"></div>
+
+        <button class="add-btn">+</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POPUP -->
+  <div class="popup-overlay">
     <div class="popup-card">
-      <input type="number" id="rank" placeholder="Rank (1~6)">
-      <input type="text" id="productName" placeholder="Product Name">
-      <input type="text" id="price" placeholder="Price">
-      <textarea id="memo" placeholder="Memo (max 2 lines)"></textarea>
-      <input type="file" id="image">
+      <input id="itemName" placeholder="상품명">
+      <textarea id="itemMemo" placeholder="메모"></textarea>
+      <input id="itemImg" placeholder="이미지 URL">
       <div class="popup-actions">
-        <button id="closePopup">Cancel</button>
-        <button id="addItemBtn">Add</button>
-        <button id="deleteItemBtn" style="display:none;">Delete</button>
+        <button id="cancelAdd">취소</button>
+        <button id="confirmAdd">추가</button>
       </div>
     </div>
   </div>
