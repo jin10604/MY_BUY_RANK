@@ -6,65 +6,127 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-html,body{margin:0;padding:0;width:100%;height:100%;}
-body{
-  background:linear-gradient(180deg,#f3f5ff 0%, #ffffff 45%);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  display:flex;justify-content:center;
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:#EFF2F9;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  display:flex;
+  justify-content:center;
 }
 
-.app{width:390px;min-height:100vh;padding:16px;box-sizing:border-box;position:relative;}
+.app{
+  width:390px;
+  min-height:100vh;
+  padding:18px;
+  box-sizing:border-box;
+}
 
+/* Header */
 header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;border-radius:22px;
-  background:rgba(255,255,255,0.8);
-  backdrop-filter:blur(14px);
-  box-shadow:0 3px 6px rgba(255,255,255,0.8),0 14px 32px rgba(0,0,0,0.12);
-  margin-bottom:18px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  border-radius:22px;
+  background:#E4EBF1;
+  box-shadow:
+    -10px -10px 20px #FAFBFF,
+     10px 10px 20px rgba(22,27,45,0.23);
+  margin-bottom:22px;
 }
 
-.logo{font-weight:700;color:#2a2f45;}
-.nav-btn{border:none;background:none;font-size:20px;color:#6f75b8;}
+.logo{
+  font-weight:600;
+  color:#2a2f45;
+}
 
+.nav-btn{
+  border:none;
+  background:none;
+  font-size:20px;
+  color:#6E7F8D;
+  cursor:pointer;
+}
+
+/* Category Frame */
 .category{
-  height:480px;padding:14px;border-radius:30px;
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(10px);
-  box-shadow:0 6px 12px rgba(255,255,255,0.9),0 24px 48px rgba(0,0,0,0.18);
-  display:flex;flex-direction:column;
+  height:520px;
+  padding:18px;
+  border-radius:30px;
+  background:#E4EBF1;
+  box-shadow:
+    -10px -10px 20px #FAFBFF,
+     10px 10px 20px rgba(22,27,45,0.23);
+  display:flex;
+  flex-direction:column;
 }
 
-.list{flex:1;overflow-y:auto;}
+/* List */
+.list{
+  flex:1;
+  overflow-y:auto;
+}
+
+/* Item placeholder */
 .item{
-  background:rgba(255,255,255,0.9);
-  border-radius:18px;
-  padding:12px;
-  margin-bottom:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  height:54px;
+  border-radius:16px;
+  background:#EFF2F9;
+  margin-bottom:12px;
+  box-shadow:
+    inset -6px -6px 10px #FAFBFF,
+    inset  6px  6px 10px rgba(22,27,45,0.18);
 }
 
+/* More Button */
 .more-btn{
-  height:48px;border:none;border-radius:22px;
-  background:rgba(255,255,255,0.9);
-  box-shadow:0 10px 22px rgba(0,0,0,0.16);
-  font-weight:600;color:#2a2f45;
+  height:52px;
+  border:none;
+  border-radius:22px;
+  background:#E4EBF1;
+  box-shadow:
+    -6px -6px 10px #FAFBFF,
+     6px  6px 10px rgba(22,27,45,0.23);
+  font-weight:600;
+  color:#2a2f45;
+  cursor:pointer;
+}
+.more-btn:active{
+  box-shadow:
+    inset -6px -6px 10px #FAFBFF,
+    inset  6px  6px 10px rgba(22,27,45,0.23);
 }
 
-/* Modal */
-.modal{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.2);
-  display:none;align-items:center;justify-content:center;
+/* Nav Menu */
+.nav-menu{
+  position:absolute;
+  top:86px;
+  right:calc(50% - 195px + 18px);
+  width:150px;
+  padding:10px;
+  border-radius:20px;
+  background:#E4EBF1;
+  box-shadow:
+    -10px -10px 20px #FAFBFF,
+     10px 10px 20px rgba(22,27,45,0.23);
+  display:none;
+  z-index:1000;
 }
-.modal-content{
-  width:280px;padding:20px;border-radius:22px;
-  background:#fff;
+
+.nav-menu button{
+  width:100%;
+  border:none;
+  background:none;
+  padding:10px;
+  text-align:left;
+  font-size:14px;
+  color:#2a2f45;
+  cursor:pointer;
 }
-.modal-content input{
-  width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;
-}
-.modal-content button{margin-top:12px;width:100%;}
 </style>
 </head>
 
@@ -73,34 +135,29 @@ header{
 
 <header>
   <div class="logo">My Buy Rank</div>
-  <button class="nav-btn">☰</button>
+  <button class="nav-btn" onclick="toggleMenu()">☰</button>
 </header>
 
+<div class="nav-menu" id="menu">
+  <button>+ 카테고리 추가</button>
+</div>
+
 <div class="category">
-  <div class="list" id="list"></div>
-  <button class="more-btn" onclick="openModal()">More</button>
-</div>
-
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <input id="itemInput" placeholder="상품 이름 입력">
-    <button onclick="addItem()">추가</button>
+  <div class="list">
+    <!-- 구조 확인용 더미 -->
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
   </div>
+  <button class="more-btn">More</button>
+</div>
+
 </div>
 
 <script>
-function openModal(){document.getElementById('modal').style.display='flex';}
-function addItem(){
-  const v=document.getElementById('itemInput').value;
-  if(!v)return;
-  const d=document.createElement('div');
-  d.className='item';
-  d.innerText=v;
-  document.getElementById('list').appendChild(d);
-  document.getElementById('itemInput').value='';
-  document.getElementById('modal').style.display='none';
+function toggleMenu(){
+  const m = document.getElementById('menu');
+  m.style.display = (m.style.display === 'block') ? 'none' : 'block';
 }
 </script>
 </body>
