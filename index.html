@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>MY BUY RANK</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>MY BUY RANK</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="header">
-  <h1>MY BUY RANK</h1>
   <button class="nav-btn">≡</button>
+  <h1>MY BUY RANK</h1>
 </header>
 
 <main class="frame-wrap">
+  <div class="frame side"></div>
+
   <div class="frame active">
-    <div class="item-list"></div>
+    <div class="item-list" id="itemList"></div>
     <button class="add-btn" id="openModal">+</button>
   </div>
+
+  <div class="frame side"></div>
 </main>
 
-<div class="modal" id="modal">
-  <div class="modal-card">
-    <input placeholder="Product Name" id="title">
-    <input placeholder="Price" id="price">
-    <textarea placeholder="Memo" id="memo"></textarea>
-    <input type="file" id="image">
-    <div class="modal-actions">
-      <button id="addItem">Add</button>
-      <button id="closeModal">Cancel</button>
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+    <input id="itemName" placeholder="상품명">
+    <input id="itemPrice" placeholder="가격 (자유입력)">
+    <input id="itemMemo" placeholder="메모">
+    <input type="file" id="itemImage">
+
+    <div class="modal-btns">
+      <button id="cancelBtn">Cancel</button>
+      <button id="addBtn">Add</button>
     </div>
   </div>
 </div>
