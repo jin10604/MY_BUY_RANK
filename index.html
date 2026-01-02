@@ -13,9 +13,11 @@
     <h1>MY BUY RANK</h1>
   </header>
 
-  <!-- 네비게이션 패널 -->
   <div class="nav-panel" id="navPanel">
-    <button class="close-nav" id="closeNav">✕</button>
+    <div class="nav-header">
+      <span>Category</span>
+      <button class="close-nav" id="closeNav">닫기</button>
+    </div>
     <div class="category-list" id="categoryList"></div>
     <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
   </div>
@@ -25,7 +27,7 @@
       <div class="frame side-frame"></div>
 
       <div class="frame main-frame">
-        <div class="frame-title" id="frameTitle">Default</div>
+        <div class="frame-title" id="frameTitle">카테고리를 선택하세요</div>
         <div class="item-list" id="itemList"></div>
         <button class="add-btn" id="openPopup">＋</button>
       </div>
@@ -34,7 +36,6 @@
     </div>
   </div>
 
-  <!-- 아이템 팝업 -->
   <div class="popup-overlay" id="popup">
     <div class="popup-card">
       <input type="number" id="rank" placeholder="Rank (1~6)">
@@ -44,7 +45,7 @@
       <input type="file" id="image">
       <div class="popup-actions">
         <button id="addItemBtn">Add</button>
-        <button id="deleteItemBtn" style="display:none;">Delete</button>
+        <button id="deleteItemBtn">Delete</button>
         <button id="closePopup">Cancel</button>
       </div>
     </div>
