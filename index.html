@@ -15,16 +15,33 @@
 
     <div class="frame-mask">
       <div class="frame-track">
-        <div class="frame side-frame left-frame"></div>
+        <div class="frame side-frame"></div>
 
         <div class="frame main-frame">
-          <button class="add-btn">＋</button>
+          <button class="add-btn" id="openPopup">＋</button>
         </div>
 
-        <div class="frame side-frame right-frame"></div>
+        <div class="frame side-frame"></div>
+      </div>
+    </div>
+
+    <!-- 아이템 추가 팝업 -->
+    <div class="popup-overlay" id="popup">
+      <div class="popup-card">
+        <input type="text" placeholder="Product Name">
+        <input type="number" placeholder="Price">
+        <textarea placeholder="Memo"></textarea>
+        <input type="file">
+
+        <div class="popup-actions">
+          <button id="addItemBtn">Add</button>
+          <button id="closePopup">Cancel</button>
+        </div>
       </div>
     </div>
 
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
