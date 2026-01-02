@@ -1,43 +1,47 @@
-const wrap=document.getElementById('frameWrap');
-const modal=document.getElementById('modal');
-const addBtn=document.getElementById('addBtn');
-const saveBtn=document.getElementById('saveBtn');
-const cancelBtn=document.getElementById('cancelBtn');
+const carousel = document.getElementById("carousel");
+const modal = document.getElementById("modal");
+const openModal = document.getElementById("openModal");
+const cancelBtn = document.getElementById("cancelBtn");
+const addBtn = document.getElementById("addBtn");
 
-addBtn.onclick=()=>modal.classList.remove('hidden');
-cancelBtn.onclick=()=>modal.classList.add('hidden');
+let frames = [];
 
-saveBtn.onclick=()=>{
-  const title=titleInput.value;
-  const memo=memoInput.value;
-  const price=priceInput.value;
-  const img=imgInput.files[0];
+function createFrame(){
+  const frame = document.createElement("div");
+  frame.className = "frame";
+  carousel.appendChild(frame);
+  frames.push(frame);
+}
 
-  const card=document.createElement('div');
-  card.className='card';
-
-  if(img){
-    const image=document.createElement('img');
-    image.src=URL.createObjectURL(img);
-    card.appendChild(image);
-  }
-
-  card.innerHTML+=`<h3>${title}</h3><p>${memo}</p><p>${price}</p>`;
-  wrap.appendChild(card);
-
-  modal.classList.add('hidden');
-  updateScale();
-};
-
-wrap.parentElement.addEventListener('scroll',updateScale);
+createFrame();
+createFrame();
+createFrame();
 
 function updateScale(){
-  const center=window.innerWidth/2;
-  document.querySelectorAll('.card').forEach(card=>{
-    const rect=card.getBoundingClientRect();
-    const cardCenter=rect.left+rect.width/2;
-    const dist=Math.abs(center-cardCenter);
-    const scale=Math.max(.7,1-dist/400);
-    card.style.transform=`scale(${scale})`;
+  const center = window.innerWidth / 2;
+  frames.forEach(frame=>{
+    const rect = frame.getBoundingClientRect();
+    const frameCenter = rect.left + rect.width/2;
+    const dist = Math.abs(center - frameCenter);
+    frame.classList.toggle("active", dist < 120);
+    frame.classList.toggle("side", dist >= 120);
   });
 }
+
+carousel.addEventListener("scroll", updateScale);
+updateScale();
+
+openModal.onclick = ()=> modal.classList.add("show");
+cancelBtn.onclick = ()=> modal.classList.remove("show");
+
+addBtn.onclick = ()=>{
+  const title = document.getElementById("itemTitle").value;
+  if(!title) return;
+
+  const item = document.createElement("div");
+  item.className="item";
+  item.innerText=title;
+
+  frames.find(f=>f.classList.contains("active")).appendChild(item);
+  modal.classList.remove("show");
+};
