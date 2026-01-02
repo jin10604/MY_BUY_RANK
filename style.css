@@ -41,32 +41,42 @@ body {
     -4px -4px 8px rgba(255,255,255,0.9);
 }
 
-/* 프레임 */
-.frame-container {
+/* 프레임 마스크 */
+.frame-mask {
   flex: 1;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
 }
 
+/* 가로 트랙 */
+.frame-track {
+  display: flex;
+  align-items: center;
+  transform: translateX(-60px);
+}
+
+/* 공통 프레임 */
 .frame {
   background: #e9edf0;
   border-radius: 24px;
   box-shadow:
     8px 8px 16px rgba(0,0,0,0.12),
     -8px -8px 16px rgba(255,255,255,0.9);
+  margin-right: 16px;
 }
 
+/* 중앙 프레임 */
 .main-frame {
-  width: 280px;
-  height: 460px;
+  width: 330px;
+  height: 480px;
   position: relative;
 }
 
+/* 좌우 프레임 */
 .side-frame {
-  width: 224px;
-  height: 368px;
+  width: 260px;
+  height: 420px;
   opacity: 0.5;
 }
 
