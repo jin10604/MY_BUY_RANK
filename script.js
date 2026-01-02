@@ -1,134 +1,142 @@
-let categories = ["Default"];
-let currentCategory = "Default";
-let items = { Default: [] };
-let editIndex = null;
+let categories = {};
+let currentCategory = null;
+let editTarget = null;
 
-/* ---------- 기본 요소 ---------- */
-const navBtn = document.querySelector(".nav-btn");
-const navPanel = document.querySelector(".nav-panel");
-const closeNavBtn = document.querySelector(".close-nav");
-const categoryList = document.querySelector(".category-list");
-const addCategoryBtn = document.querySelector(".add-category");
-const frameTitle = document.querySelector(".frame-title");
-const itemList = document.querySelector(".item-list");
-const addBtn = document.querySelector(".add-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const navPanel = document.getElementById("navPanel");
+  const openNav = document.getElementById("openNav");
+  const closeNav = document.getElementById("closeNav");
+  const categoryList = document.getElementById("categoryList");
+  const addCategoryBtn = document.getElementById("addCategoryBtn");
+  const frameTitle = document.getElementById("frameTitle");
 
-const popup = document.querySelector(".popup-overlay");
-const saveBtn = document.querySelector("#saveItem");
-const cancelBtn = document.querySelector("#cancelItem");
-const deleteBtn = document.querySelector("#deleteItem");
+  const popup = document.getElementById("popup");
+  const openBtn = document.getElementById("openPopup");
+  const closeBtn = document.getElementById("closePopup");
+  const addBtn = document.getElementById("addItemBtn");
+  const deleteBtn = document.getElementById("deleteItemBtn");
+  const list = document.getElementById("itemList");
 
-const rankInput = document.querySelector("#rank");
-const nameInput = document.querySelector("#productName");
-const priceInput = document.querySelector("#price");
-const memoInput = document.querySelector("#memo");
-const imageInput = document.querySelector("#image");
+  openNav.onclick = () => navPanel.classList.add("active");
+  closeNav.onclick = () => navPanel.classList.remove("active");
 
-/* ---------- 네비게이션 ---------- */
-navBtn.onclick = () => navPanel.classList.add("active");
-closeNavBtn.onclick = () => navPanel.classList.remove("active");
-
-/* ---------- 카테고리 ---------- */
-function renderCategories() {
-  categoryList.innerHTML = "";
-  categories.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.textContent = cat;
-    btn.onclick = () => {
-      currentCategory = cat;
-      frameTitle.textContent = cat;
-      navPanel.classList.remove("active");
-      renderItems();
-    };
-    categoryList.appendChild(btn);
-  });
-}
-addCategoryBtn.onclick = () => {
-  const name = prompt("카테고리 이름 입력");
-  if (!name) return;
-  categories.push(name);
-  items[name] = [];
-  renderCategories();
-};
-
-/* ---------- 아이템 ---------- */
-function renderItems() {
-  itemList.innerHTML = "";
-  items[currentCategory]
-    .sort((a,b)=>a.rank-b.rank)
-    .forEach((item,i)=>{
-      const card = document.createElement("div");
-      card.className = "item-card";
-
-      card.innerHTML = `
-        <div class="rank-badge">#${item.rank}</div>
-        <div>${item.name}</div>
-        <div>${item.price}</div>
-        <div class="memo-text">${item.memo}</div>
-        ${item.image?`<img src="${item.image}">`:""}
-        <div class="edit-btn">수정</div>
-      `;
-
-      card.querySelector(".edit-btn").onclick=()=>{
-        editIndex=i;
-        rankInput.value=item.rank;
-        nameInput.value=item.name;
-        priceInput.value=item.price;
-        memoInput.value=item.memo;
-        popup.style.display="flex";
-        deleteBtn.style.display="block";
-      };
-      itemList.appendChild(card);
-    });
-}
-
-addBtn.onclick = ()=>{
-  editIndex=null;
-  rankInput.value="";
-  nameInput.value="";
-  priceInput.value="";
-  memoInput.value="";
-  imageInput.value="";
-  deleteBtn.style.display="none";
-  popup.style.display="flex";
-};
-
-/* ---------- 저장 ---------- */
-saveBtn.onclick=()=>{
-  if(!rankInput.value||!nameInput.value)return alert("순위와 상품명은 필수입니다.");
-
-  const rank=Number(rankInput.value);
-  if(items[currentCategory].some((v,i)=>v.rank===rank&&i!==editIndex))
-    return alert("중복된 순위가 있습니다.");
-
-  const file=imageInput.files[0];
-  const img=file?URL.createObjectURL(file):null;
-
-  const data={
-    rank,
-    name:nameInput.value,
-    price:priceInput.value,
-    memo:memoInput.value,
-    image:img
+  addCategoryBtn.onclick = () => {
+    const name = prompt("Category name?");
+    if (!name || categories[name]) return;
+    categories[name] = [];
+    renderCategories();
+    selectCategory(name);
   };
 
-  if(editIndex===null) items[currentCategory].push(data);
-  else items[currentCategory][editIndex]=data;
+  function renderCategories() {
+    categoryList.innerHTML = "";
+    Object.keys(categories).forEach(name => {
+      const btn = document.createElement("div");
+      btn.className = "category-item";
+      btn.textContent = name;
+      btn.onclick = () => selectCategory(name);
+      categoryList.appendChild(btn);
+    });
+  }
 
-  popup.style.display="none";
-  renderItems();
-};
+  function selectCategory(name) {
+    currentCategory = name;
+    frameTitle.textContent = name;
+    navPanel.classList.remove("active");
+    renderItems();
+  }
 
-/* ---------- 삭제 ---------- */
-deleteBtn.onclick=()=>{
-  if(editIndex!==null) items[currentCategory].splice(editIndex,1);
-  popup.style.display="none";
-  renderItems();
-};
+  openBtn.onclick = () => {
+    if (!currentCategory) {
+      alert("카테고리를 먼저 선택하세요.");
+      return;
+    }
+    popup.style.display = "flex";
+    editTarget = null;
+    deleteBtn.style.display = "none";
+    clearInputs();
+  };
 
-cancelBtn.onclick=()=>popup.style.display="none";
+  closeBtn.onclick = () => popup.style.display = "none";
 
-/* ---------- 초기 ---------- */
-frameTitle.textContent=currentCategory;
-renderCategories();
-renderItems();
+  addBtn.onclick = () => {
+    const rankVal = rank.value.trim();
+    const nameVal = productName.value.trim();
+
+    if (!rankVal || !nameVal) {
+      alert("Rank와 Product Name은 필수입니다.");
+      return;
+    }
+
+    if (categories[currentCategory].some(i => i.dataset.rank === rankVal && i !== editTarget)) {
+      alert("중복된 Rank 입니다.");
+      return;
+    }
+
+    let card = editTarget || document.createElement("div");
+    card.className = "item-card";
+    card.dataset.rank = rankVal;
+    card.innerHTML = "";
+
+    const rankBadge = document.createElement("div");
+    rankBadge.className = "rank-badge";
+    rankBadge.textContent = rankVal + "위";
+    card.appendChild(rankBadge);
+
+    const edit = document.createElement("div");
+    edit.textContent = "✎ 수정";
+    edit.className = "edit-btn";
+    edit.onclick = () => openEdit(card);
+    card.appendChild(edit);
+
+    if (image.files[0]) {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(image.files[0]);
+      card.appendChild(img);
+    }
+
+    const nameDiv = document.createElement("div");
+    nameDiv.textContent = nameVal;
+    card.appendChild(nameDiv);
+
+    const memoDiv = document.createElement("div");
+    memoDiv.className = "memo-text";
+    memoDiv.textContent = memo.value;
+    card.appendChild(memoDiv);
+
+    categories[currentCategory] = categories[currentCategory].filter(i => i !== editTarget);
+    categories[currentCategory].push(card);
+    categories[currentCategory].sort((a,b)=>a.dataset.rank-b.dataset.rank);
+    renderItems();
+
+    popup.style.display = "none";
+  };
+
+  deleteBtn.onclick = () => {
+    categories[currentCategory] = categories[currentCategory].filter(i => i !== editTarget);
+    renderItems();
+    popup.style.display = "none";
+  };
+
+  function openEdit(card) {
+    editTarget = card;
+    rank.value = card.dataset.rank;
+    productName.value = card.children[3]?.textContent || "";
+    memo.value = card.children[4]?.textContent || "";
+    deleteBtn.style.display = "block";
+    popup.style.display = "flex";
+  }
+
+  function renderItems() {
+    list.innerHTML = "";
+    categories[currentCategory].forEach(card => list.appendChild(card));
+  }
+
+  function clearInputs() {
+    rank.value = "";
+    productName.value = "";
+    price.value = "";
+    memo.value = "";
+    image.value = "";
+  }
+});
