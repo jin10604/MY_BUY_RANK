@@ -1,72 +1,42 @@
-let editTarget = null;
-
 document.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById("popup");
   const openBtn = document.getElementById("openPopup");
   const closeBtn = document.getElementById("closePopup");
   const addBtn = document.getElementById("addItemBtn");
-  const deleteBtn = document.getElementById("deleteItemBtn");
   const list = document.getElementById("itemList");
 
   openBtn.onclick = () => {
     popup.style.display = "flex";
-    editTarget = null;
-    deleteBtn.style.display = "none";
-    clearInputs();
+    rank.value = productName.value = price.value = memo.value = "";
+    image.value = "";
   };
 
   closeBtn.onclick = () => popup.style.display = "none";
 
   addBtn.onclick = () => {
-    const nameVal = productName.value;
-    const priceVal = price.value;
-    const memoVal = memo.value;
-    const file = image.files[0];
-
-    let card = editTarget || document.createElement("div");
-    card.className = "item-card";
-    card.innerHTML = "";
-
-    const edit = document.createElement("div");
-    edit.textContent = "✎ 수정";
-    edit.className = "edit-btn";
-    edit.onclick = () => openEdit(card, nameVal, priceVal, memoVal);
-    card.appendChild(edit);
-
-    if (file) {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      card.appendChild(img);
+    if (!rank.value && !productName.value && !memo.value && !image.files[0]) {
+      alert("내용을 하나 이상 입력하세요.");
+      return;
     }
 
-    [nameVal, priceVal, memoVal].forEach(text => {
-      const d = document.createElement("div");
-      d.textContent = text;
-      card.appendChild(d);
-    });
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.dataset.rank = rank.value || 999;
 
-    if (!editTarget) list.appendChild(card);
+    card.innerHTML = `
+      <div class="edit-btn">✎ 수정</div>
+      <div><strong>${productName.value}</strong></div>
+      <div class="memo-preview">${memo.value}</div>
+    `;
+
+    list.appendChild(card);
+    sortByRank();
     popup.style.display = "none";
   };
 
-  deleteBtn.onclick = () => {
-    if (editTarget) editTarget.remove();
-    popup.style.display = "none";
-  };
-
-  function openEdit(card, n, p, m) {
-    editTarget = card;
-    productName.value = n;
-    price.value = p;
-    memo.value = m;
-    deleteBtn.style.display = "block";
-    popup.style.display = "flex";
-  }
-
-  function clearInputs() {
-    productName.value = "";
-    price.value = "";
-    memo.value = "";
-    image.value = "";
+  function sortByRank(){
+    const items = [...document.querySelectorAll(".item-card")];
+    items.sort((a,b)=>a.dataset.rank - b.dataset.rank);
+    items.forEach(i=>list.appendChild(i));
   }
 });
