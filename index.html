@@ -1,92 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-html,body{margin:0;padding:0;width:100%;height:100%;}
-body{
-  background:#EFF2F9;
-  display:flex;
-  justify-content:center;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-}
-
-/* App Frame */
-.app{
-  width:390px;
-  min-height:100vh;
-  padding:16px;
-  box-sizing:border-box;
-  position:relative;
-}
+html,body{margin:0;height:100%;}
+body{background:#EFF2F9;display:flex;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}
+.app{width:390px;min-height:100vh;padding:16px;position:relative}
 
 /* Header */
 header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 18px;
-  border-radius:22px;
-  background:#EFF2F9;
-  box-shadow:-6px -6px 12px #fff, 6px 6px 12px rgba(22,27,29,.12);
-  margin-bottom:20px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;border-radius:22px;background:#EFF2F9;
+  box-shadow:-6px -6px 12px #fff,6px 6px 12px rgba(22,27,29,.12);
 }
-.nav-btn{border:none;background:none;font-size:20px;color:#6E7F8D}
+header button{border:none;background:none;font-size:20px}
 
 /* Category Frame */
 .category{
-  height:520px;
-  border-radius:32px;
-  background:#E4EBF1;
-  box-shadow:inset -6px -6px 12px #fff, inset 6px 6px 12px rgba(22,27,29,.18);
-  padding:18px;
-  display:flex;
-  flex-direction:column;
+  margin-top:20px;height:520px;border-radius:32px;
+  background:#E4EBF1;padding:16px;
+  box-shadow:inset -6px -6px 12px #fff,inset 6px 6px 12px rgba(22,27,29,.18);
+  display:flex;flex-direction:column;
 }
-.add-item-btn{
-  margin-top:auto;
-  height:56px;
-  border:none;
-  border-radius:20px;
-  background:#EFF2F9;
-  box-shadow:-5px -5px 10px #fff,5px 5px 10px rgba(22,27,29,.15);
-  font-size:22px;
-}
+.list{flex:1;overflow-y:auto}
+.item{padding:10px;border-radius:14px;background:#EFF2F9;margin-bottom:8px;
+  box-shadow:-3px -3px 6px #fff,3px 3px 6px rgba(22,27,29,.12);}
+.add-btn{height:52px;border:none;border-radius:18px;background:#EFF2F9;
+  box-shadow:-4px -4px 8px #fff,4px 4px 8px rgba(22,27,29,.12);}
 
-/* Modal — 앱 기준 */
+/* Nav Panel */
+.nav{
+  position:absolute;top:0;right:-260px;width:240px;height:100%;
+  background:#EFF2F9;padding:20px;transition:.3s;
+  box-shadow:-6px 0 12px rgba(22,27,29,.2);
+}
+.nav.open{right:0}
+.nav button{width:100%;margin-top:10px;height:42px;border:none;border-radius:14px;
+background:#EFF2F9;box-shadow:-4px -4px 8px #fff,4px 4px 8px rgba(22,27,29,.12);}
+
+/* Modals */
 .modal-bg{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,.2);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  border-radius:32px;
+  position:absolute;inset:0;background:rgba(0,0,0,.2);
+  display:none;justify-content:center;align-items:center;
 }
 .modal{
-  width:280px;
-  background:#EFF2F9;
-  padding:20px;
-  border-radius:28px;
+  width:280px;background:#EFF2F9;padding:18px;border-radius:22px;
   box-shadow:-6px -6px 12px #fff,6px 6px 12px rgba(22,27,29,.18);
 }
-.modal input,.modal textarea{
-  width:100%;
-  border:none;
-  border-radius:14px;
-  padding:10px 14px;
-  margin-bottom:12px;
-  background:#EFF2F9;
-  box-shadow:inset -4px -4px 8px #fff,inset 4px 4px 8px rgba(22,27,29,.12);
-}
-.modal button{
-  width:100%;height:42px;border:none;border-radius:14px;
-  background:#EFF2F9;
-  box-shadow:-4px -4px 8px #fff,4px 4px 8px rgba(22,27,29,.12);
-}
+.modal input{width:100%;margin-bottom:10px;padding:10px;border:none;border-radius:12px;
+background:#EFF2F9;box-shadow:inset -3px -3px 6px #fff,inset 3px 3px 6px rgba(22,27,29,.12);}
+.modal button{width:100%;height:42px;border:none;border-radius:12px;
+background:#EFF2F9;box-shadow:-3px -3px 6px #fff,3px 3px 6px rgba(22,27,29,.12);}
 </style>
 </head>
 
@@ -94,31 +60,61 @@ header{
 <div class="app">
 
 <header>
-  <div>My Buy Rank</div>
-  <button class="nav-btn">☰</button>
+  <strong>My Buy Rank</strong>
+  <button onclick="toggleNav()">☰</button>
 </header>
 
 <div class="category">
-  <button class="add-item-btn" onclick="openModal()">＋</button>
+  <div class="list" id="itemList"></div>
+  <button class="add-btn" onclick="openItemModal()">＋ Add Item</button>
 </div>
 
-<div class="modal-bg" id="modal">
+<div class="nav" id="nav">
+  <button onclick="toggleNav()">Close</button>
+  <button onclick="openCategoryModal()">＋ Add Category</button>
+</div>
+
+<!-- Item Modal -->
+<div class="modal-bg" id="itemModal">
   <div class="modal">
-    <input placeholder="제품명">
-    <input placeholder="가격">
-    <textarea rows="3" placeholder="메모"></textarea>
-    <button onclick="closeModal()">추가</button>
+    <input id="pName" placeholder="Product Name">
+    <input id="pPrice" placeholder="Price">
+    <button onclick="addItem()">Add</button>
+  </div>
+</div>
+
+<!-- Category Modal -->
+<div class="modal-bg" id="catModal">
+  <div class="modal">
+    <input id="cName" placeholder="Category Name">
+    <button onclick="closeCategoryModal()">Create</button>
   </div>
 </div>
 
 </div>
 
 <script>
-function openModal(){
-  document.getElementById('modal').style.display='flex';
-}
-function closeModal(){
-  document.getElementById('modal').style.display='none';
+const nav = document.getElementById('nav');
+const itemModal = document.getElementById('itemModal');
+const catModal = document.getElementById('catModal');
+const list = document.getElementById('itemList');
+
+function toggleNav(){ nav.classList.toggle('open'); }
+
+function openItemModal(){ itemModal.style.display='flex'; }
+function openCategoryModal(){ catModal.style.display='flex'; }
+function closeCategoryModal(){ catModal.style.display='none'; }
+
+function addItem(){
+  const name = pName.value;
+  const price = pPrice.value;
+  if(!name || !price) return;
+  const div = document.createElement('div');
+  div.className='item';
+  div.innerText = `${name} - ${price}`;
+  list.appendChild(div);
+  pName.value = pPrice.value = '';
+  itemModal.style.display='none';
 }
 </script>
 </body>
