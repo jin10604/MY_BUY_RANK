@@ -1,72 +1,43 @@
-let editTarget = null;
+const wrap=document.getElementById('frameWrap');
+const modal=document.getElementById('modal');
+const addBtn=document.getElementById('addBtn');
+const saveBtn=document.getElementById('saveBtn');
+const cancelBtn=document.getElementById('cancelBtn');
 
-document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.getElementById("popup");
-  const openBtn = document.getElementById("openPopup");
-  const closeBtn = document.getElementById("closePopup");
-  const addBtn = document.getElementById("addItemBtn");
-  const deleteBtn = document.getElementById("deleteItemBtn");
-  const list = document.getElementById("itemList");
+addBtn.onclick=()=>modal.classList.remove('hidden');
+cancelBtn.onclick=()=>modal.classList.add('hidden');
 
-  openBtn.onclick = () => {
-    popup.style.display = "flex";
-    editTarget = null;
-    deleteBtn.style.display = "none";
-    clearInputs();
-  };
+saveBtn.onclick=()=>{
+  const title=titleInput.value;
+  const memo=memoInput.value;
+  const price=priceInput.value;
+  const img=imgInput.files[0];
 
-  closeBtn.onclick = () => popup.style.display = "none";
+  const card=document.createElement('div');
+  card.className='card';
 
-  addBtn.onclick = () => {
-    const nameVal = productName.value;
-    const priceVal = price.value;
-    const memoVal = memo.value;
-    const file = image.files[0];
-
-    let card = editTarget || document.createElement("div");
-    card.className = "item-card";
-    card.innerHTML = "";
-
-    const edit = document.createElement("div");
-    edit.textContent = "✎ 수정";
-    edit.className = "edit-btn";
-    edit.onclick = () => openEdit(card, nameVal, priceVal, memoVal);
-    card.appendChild(edit);
-
-    if (file) {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      card.appendChild(img);
-    }
-
-    [nameVal, priceVal, memoVal].forEach(text => {
-      const d = document.createElement("div");
-      d.textContent = text;
-      card.appendChild(d);
-    });
-
-    if (!editTarget) list.appendChild(card);
-    popup.style.display = "none";
-  };
-
-  deleteBtn.onclick = () => {
-    if (editTarget) editTarget.remove();
-    popup.style.display = "none";
-  };
-
-  function openEdit(card, n, p, m) {
-    editTarget = card;
-    productName.value = n;
-    price.value = p;
-    memo.value = m;
-    deleteBtn.style.display = "block";
-    popup.style.display = "flex";
+  if(img){
+    const image=document.createElement('img');
+    image.src=URL.createObjectURL(img);
+    card.appendChild(image);
   }
 
-  function clearInputs() {
-    productName.value = "";
-    price.value = "";
-    memo.value = "";
-    image.value = "";
-  }
-});
+  card.innerHTML+=`<h3>${title}</h3><p>${memo}</p><p>${price}</p>`;
+  wrap.appendChild(card);
+
+  modal.classList.add('hidden');
+  updateScale();
+};
+
+wrap.parentElement.addEventListener('scroll',updateScale);
+
+function updateScale(){
+  const center=window.innerWidth/2;
+  document.querySelectorAll('.card').forEach(card=>{
+    const rect=card.getBoundingClientRect();
+    const cardCenter=rect.left+rect.width/2;
+    const dist=Math.abs(center-cardCenter);
+    const scale=Math.max(.7,1-dist/400);
+    card.style.transform=`scale(${scale})`;
+  });
+}
