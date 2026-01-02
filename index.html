@@ -8,7 +8,6 @@
 <style>
 body{
   margin:0;
-  height:100vh;
   background:#ffffff;
   font-family: system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
   display:flex;
@@ -20,88 +19,71 @@ body{
   padding:16px;
 }
 
-/* ===== Header ===== */
+/* Header */
 header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px 14px;
-  border-radius:18px;
-  background:rgba(255,255,255,0.7);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(180,185,255,0.18);
-  box-shadow:0 4px 12px rgba(0,0,0,0.04);
-  margin-bottom:16px;
+  padding:12px 16px;
+  border-radius:20px;
+  background:#f4f6fb;
+  box-shadow:
+    6px 6px 12px rgba(0,0,0,0.06),
+   -6px -6px 12px rgba(255,255,255,0.9);
+  margin-bottom:18px;
 }
 
-.logo{
-  font-weight:700;
-  color:#1f2430;
+.logo{font-weight:700;color:#2a2f45;}
+.nav-btn{border:none;background:none;font-size:20px;color:#8b90c8}
+
+/* Layout */
+.category-wrap{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
 }
 
-.nav-btn{
-  border:none;
-  background:none;
-  font-size:20px;
-  color:#8b90c8;
-}
-
-/* ===== Category Frame ===== */
+/* Category Frame */
 .category{
+  flex:1;
   height:480px;
   padding:14px;
-  border-radius:26px;
-  background:rgba(255,255,255,0.65);
-  backdrop-filter:blur(18px);
-  border:1px solid rgba(160,170,255,0.2);
-  box-shadow:0 12px 28px rgba(0,0,0,0.05);
+  border-radius:30px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(170,175,255,0.22);
+  box-shadow:
+    inset 4px 4px 10px rgba(255,255,255,0.9),
+    inset -4px -4px 10px rgba(0,0,0,0.04),
+    0 12px 28px rgba(0,0,0,0.08);
   display:flex;
   flex-direction:column;
 }
 
-.list{
-  flex:1;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.empty{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#9aa0c8;
-  font-size:14px;
-}
-
-/* ===== Buttons ===== */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-}
-
-.add-btn{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  border:1px solid rgba(170,180,255,0.25);
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(10px);
-  font-size:24px;
-  color:#6f75b8;
-}
+.list{flex:1; overflow-y:auto;}
 
 .more-btn{
-  flex:1;
-  border-radius:16px;
-  border:1px solid rgba(170,180,255,0.25);
+  height:48px;
+  border-radius:18px;
+  border:1px solid rgba(170,175,255,0.25);
   background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(10px);
-  color:#1f2430;
+  backdrop-filter:blur(12px);
   font-weight:600;
+  color:#2a2f45;
+}
+
+/* Add Button */
+.add-btn{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:none;
+  background:#f4f6fb;
+  box-shadow:
+    6px 6px 12px rgba(0,0,0,0.08),
+   -6px -6px 12px rgba(255,255,255,0.9);
+  font-size:26px;
+  color:#7a7fd1;
 }
 </style>
 </head>
@@ -110,20 +92,4 @@ header{
 <div class="app">
 
 <header>
-  <div class="logo">My Buy Rank</div>
-  <button class="nav-btn">☰</button>
-</header>
-
-<div class="category">
-  <div class="list">
-    <div class="empty">+</div>
-  </div>
-  <div class="actions">
-    <button class="add-btn">+</button>
-    <button class="more-btn">More</button>
-  </div>
-</div>
-
-</div>
-</body>
-</html>
+  <div class="
