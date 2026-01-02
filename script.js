@@ -1,3 +1,5 @@
+let editTarget = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById("popup");
   const openBtn = document.getElementById("openPopup");
@@ -7,36 +9,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
   openBtn.onclick = () => {
     popup.style.display = "flex";
-    rank.value = productName.value = price.value = memo.value = "";
-    image.value = "";
+    clearInputs();
+    editTarget = null;
   };
 
   closeBtn.onclick = () => popup.style.display = "none";
 
   addBtn.onclick = () => {
-    if (!rank.value && !productName.value && !memo.value && !image.files[0]) {
-      alert("내용을 하나 이상 입력하세요.");
+    const r = rank.value.trim();
+    const name = productName.value;
+    const memoVal = memo.value;
+    const file = image.files[0];
+
+    if (!r) {
+      alert("Rank 는 필수입니다.");
       return;
     }
 
-    const card = document.createElement("div");
+    if (!editTarget && document.querySelector(`.item-card[data-rank="${r}"]`)) {
+      alert("이미 사용 중인 순위입니다.");
+      return;
+    }
+
+    let card = editTarget || document.createElement("div");
     card.className = "item-card";
-    card.dataset.rank = rank.value || 999;
+    card.dataset.rank = r;
+    card.innerHTML = "";
 
-    card.innerHTML = `
-      <div class="edit-btn">✎ 수정</div>
-      <div><strong>${productName.value}</strong></div>
-      <div class="memo-preview">${memo.value}</div>
-    `;
+    const rankDiv = document.createElement("div");
+    rankDiv.className = "rank-badge";
+    rankDiv.textContent = `#${r}`;
+    card.appendChild(rankDiv);
 
-    list.appendChild(card);
+    if (file) {
+      const img = document.createElement("img");
+      img.className = "preview-img";
+      img.src = URL.createObjectURL(file);
+      card.appendChild(img);
+    }
+
+    const title = document.createElement("div");
+    title.textContent = name;
+    card.appendChild(title);
+
+    const memoDiv = document.createElement("div");
+    memoDiv.className = "memo-preview";
+    memoDiv.textContent = memoVal;
+    card.appendChild(memoDiv);
+
+    const edit = document.createElement("div");
+    edit.textContent = "✎ 수정";
+    edit.className = "edit-btn";
+    edit.onclick = () => openEdit(card);
+    card.appendChild(edit);
+
+    if (!editTarget) list.appendChild(card);
+
     sortByRank();
     popup.style.display = "none";
   };
 
+  function openEdit(card){
+    editTarget = card;
+    rank.value = card.dataset.rank;
+    productName.value = card.children[2]?.textContent || "";
+    memo.value = card.children[3]?.textContent || "";
+    popup.style.display = "flex";
+  }
+
   function sortByRank(){
-    const items = [...document.querySelectorAll(".item-card")];
-    items.sort((a,b)=>a.dataset.rank - b.dataset.rank);
-    items.forEach(i=>list.appendChild(i));
+    [...list.children]
+      .sort((a,b)=>a.dataset.rank - b.dataset.rank)
+      .forEach(el=>list.appendChild(el));
+  }
+
+  function clearInputs(){
+    rank.value = productName.value = memo.value = "";
+    image.value = "";
   }
 });
