@@ -4,120 +4,168 @@
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{
-  margin:0; background:#EFF2F9; font-family:system-ui;
-  display:flex; justify-content:center;
-}
-.app{width:390px; min-height:100vh; padding:16px;}
-header{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 18px; border-radius:24px;
-  background:#E4EBF1;
-  box-shadow:-5px -5px 10px #FAFBFF,5px 5px 10px rgba(22,27,29,.23);
-}
-.nav-btn{border:none;background:none;font-size:20px}
 
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;}
+body{
+  background:#EFF2F9;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  display:flex;
+  justify-content:center;
+}
+
+/* App frame */
+.app{
+  width:390px;
+  min-height:100vh;
+  padding:16px;
+  box-sizing:border-box;
+  position:relative;
+}
+
+/* Header */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 18px;
+  border-radius:22px;
+  background:#EFF2F9;
+  box-shadow:
+    -6px -6px 12px rgba(255,255,255,1),
+     6px 6px 12px rgba(22,27,29,0.12);
+  margin-bottom:20px;
+}
+.logo{font-weight:600;color:#2A2F45;}
+.nav-btn{
+  border:none;background:none;font-size:20px;color:#6E7F8D;
+}
+
+/* Category frame */
 .category{
-  margin-top:20px;
   height:520px;
   border-radius:32px;
   background:#E4EBF1;
-  box-shadow:-10px -10px 20px #FAFBFF,10px 10px 20px rgba(22,27,29,.23);
+  box-shadow:
+    inset -6px -6px 12px rgba(255,255,255,1),
+    inset 6px 6px 12px rgba(22,27,29,0.18);
   padding:18px;
-  display:flex; flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
-.list{flex:1; overflow-y:auto;}
 
-.item{
+/* Add item button */
+.add-item-btn{
+  height:56px;
+  border-radius:20px;
+  border:none;
   background:#EFF2F9;
-  padding:12px 14px;
-  border-radius:18px;
-  margin-bottom:12px;
-  box-shadow:inset -4px -4px 8px #FAFBFF,inset 4px 4px 8px rgba(22,27,29,.18);
-  font-size:14px;
+  box-shadow:
+    -5px -5px 10px rgba(255,255,255,1),
+     5px 5px 10px rgba(22,27,29,0.15);
+  font-size:22px;
+  color:#6E7F8D;
+  margin-top:auto;
 }
 
-.center-add{
-  height:60px; border:none; border-radius:20px;
+/* Slide nav */
+.nav-menu{
+  position:fixed;
+  top:0; right:-260px;
+  width:240px; height:100%;
   background:#EFF2F9;
-  box-shadow:-6px -6px 12px #FAFBFF,6px 6px 12px rgba(22,27,29,.23);
-  font-size:24px;
+  box-shadow:-8px 0 16px rgba(22,27,29,0.15);
+  transition:.35s;
+  padding:20px;
+}
+.nav-menu.open{right:0;}
+.nav-menu h3{margin-top:0;}
+.nav-menu button{
+  width:100%; border:none; background:none;
+  padding:10px; text-align:left;
+  color:#2A2F45;
 }
 
+/* Modal */
+.modal-bg{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.2);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
 .modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.2);
-  display:none; justify-content:center; align-items:center;
-}
-.modal-box{
-  width:320px; background:#E4EBF1;
-  padding:20px; border-radius:24px;
-  box-shadow:-8px -8px 16px #FAFBFF,8px 8px 16px rgba(22,27,29,.23);
-}
-.modal-box input, .modal-box textarea{
-  width:100%; margin-bottom:12px;
-  padding:10px 14px; border:none;
-  border-radius:14px; font-size:14px;
+  width:300px;
   background:#EFF2F9;
-  box-shadow:inset -4px -4px 8px #FAFBFF,inset 4px 4px 8px rgba(22,27,29,.18);
+  border-radius:28px;
+  padding:20px;
+  box-shadow:
+    -6px -6px 12px rgba(255,255,255,1),
+     6px 6px 12px rgba(22,27,29,0.18);
 }
-.modal-box button{
-  width:100%; padding:12px;
-  border:none; border-radius:14px;
+.modal input, .modal textarea{
+  width:100%;
+  border:none;
+  border-radius:16px;
+  padding:10px 14px;
+  margin-bottom:12px;
   background:#EFF2F9;
-  box-shadow:-4px -4px 8px #FAFBFF,4px 4px 8px rgba(22,27,29,.23);
+  box-shadow:
+    inset -4px -4px 8px rgba(255,255,255,1),
+    inset 4px 4px 8px rgba(22,27,29,0.12);
+}
+.modal button{
+  width:100%;
+  height:44px;
+  border:none;
+  border-radius:16px;
+  background:#EFF2F9;
+  box-shadow:
+    -4px -4px 8px rgba(255,255,255,1),
+     4px 4px 8px rgba(22,27,29,0.12);
 }
 </style>
 </head>
 
 <body>
 <div class="app">
+
 <header>
-  <div>My Buy Rank</div>
-  <button class="nav-btn" onclick="openModal()">＋</button>
+  <div class="logo">My Buy Rank</div>
+  <button class="nav-btn" onclick="toggleNav()">☰</button>
 </header>
 
 <div class="category">
-  <div class="list" id="list"></div>
-  <button class="center-add" id="centerBtn" onclick="openModal()">＋</button>
-</div>
+  <button class="add-item-btn" onclick="openModal()">＋</button>
 </div>
 
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <input id="name" placeholder="제품명">
-    <input id="price" placeholder="가격">
-    <textarea id="memo" placeholder="메모"></textarea>
-    <button onclick="addItem()">추가</button>
+<div class="nav-menu" id="nav">
+  <h3>카테고리</h3>
+  <button>장난감</button>
+  <button>의류</button>
+  <button>카테고리 추가</button>
+</div>
+
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <input placeholder="제품명">
+    <input placeholder="가격">
+    <textarea rows="3" placeholder="메모"></textarea>
+    <button onclick="closeModal()">추가</button>
   </div>
 </div>
 
+</div>
+
 <script>
-let items=[];
-
+function toggleNav(){
+  document.getElementById('nav').classList.toggle('open');
+}
 function openModal(){
-  if(items.length>=6) return;
-  modal.style.display='flex';
+  document.getElementById('modal').style.display='flex';
 }
-
-modal.onclick=e=>{if(e.target===modal)modal.style.display='none'}
-
-function addItem(){
-  if(items.length>=6) return alert("아이템은 6개까지입니다");
-  const n=name.value,p=price.value,m=memo.value;
-  if(!n) return;
-  items.push({n,p,m});
-  name.value=price.value=memo.value='';
-  modal.style.display='none';
-  render();
-}
-
-function render(){
-  list.innerHTML='';
-  items.forEach(i=>{
-    list.innerHTML+=`<div class="item">${i.n}<br>${i.p}<br>${i.m}</div>`;
-  });
-  centerBtn.style.display = items.length<6?'block':'none';
+function closeModal(){
+  document.getElementById('modal').style.display='none';
 }
 </script>
 </body>
