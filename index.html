@@ -3,199 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
-<style>
-body {
-  margin:0;
-  font-family:'Avenir Next', sans-serif;
-  background:#EFF2F9;
-}
-
-.app {
-  width:390px;
-  height:780px;
-  margin:30px auto;
-  background:#E4EBF1;
-  border-radius:30px;
-  box-shadow: 20px 20px 40px rgba(22,27,29,0.15), -20px -20px 40px #FAFBFF;
-  position:relative;
-  overflow:hidden;
-}
-
-/* Header */
-.header{
-  height:60px;
-  margin:15px;
-  background:#EFF2F9;
-  border-radius:20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 20px;
-  box-shadow: 10px 10px 20px rgba(22,27,29,0.15), -10px -10px 20px #FAFBFF;
-}
-
-.header button{
-  border:none;
-  background:none;
-  font-size:22px;
-  cursor:pointer;
-}
-
-/* Item area */
-.items{
-  margin:20px;
-  display:grid;
-  gap:15px;
-}
-
-.item-card{
-  background:#EFF2F9;
-  border-radius:18px;
-  padding:15px;
-  box-shadow: inset 6px 6px 12px rgba(22,27,29,0.15),
-              inset -6px -6px 12px #FAFBFF;
-}
-
-/* Add Item */
-.add-item{
-  position:absolute;
-  bottom:20px;
-  left:20px;
-  right:20px;
-  height:50px;
-  border-radius:20px;
-  background:#EFF2F9;
-  box-shadow: 10px 10px 20px rgba(22,27,29,0.15), -10px -10px 20px #FAFBFF;
-  border:none;
-  font-size:22px;
-  cursor:pointer;
-}
-
-/* Navigation */
-.nav{
-  position:absolute;
-  top:0;
-  right:-260px;
-  width:260px;
-  height:100%;
-  background:#EFF2F9;
-  box-shadow:-10px 0 20px rgba(22,27,29,0.15);
-  padding:20px;
-  transition:.3s;
-}
-
-.nav.open{ right:0; }
-
-.nav button{
-  width:100%;
-  height:45px;
-  border:none;
-  border-radius:16px;
-  margin-bottom:10px;
-  background:#EFF2F9;
-  box-shadow: 6px 6px 12px rgba(22,27,29,0.15), -6px -6px 12px #FAFBFF;
-  cursor:pointer;
-}
-
-/* Popup */
-.popup{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.2);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-
-.popup-content{
-  width:300px;
-  background:#EFF2F9;
-  border-radius:25px;
-  padding:20px;
-  box-shadow: 15px 15px 30px rgba(22,27,29,0.15), -15px -15px 30px #FAFBFF;
-}
-
-.popup-content input, .popup-content textarea{
-  width:100%;
-  margin-bottom:12px;
-  padding:12px;
-  border:none;
-  border-radius:15px;
-  background:#EFF2F9;
-  box-shadow: inset 6px 6px 12px rgba(22,27,29,0.15),
-              inset -6px -6px 12px #FAFBFF;
-}
-
-.popup-content button{
-  width:100%;
-  height:45px;
-  border:none;
-  border-radius:15px;
-  background:#EFF2F9;
-  box-shadow: 6px 6px 12px rgba(22,27,29,0.15), -6px -6px 12px #FAFBFF;
-  cursor:pointer;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
 <div class="app">
-  <div class="header">
-    <div>My Buy Rank</div>
-    <button onclick="toggleNav()">≡</button>
+
+<header>
+  <span>My Buy Rank</span>
+  <button id="openNav">☰</button>
+</header>
+
+<div class="frames" id="frames"></div>
+
+<button class="addBtn" id="openItemModal">+</button>
+
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="navHeader">
+    <span>Menu</span>
+    <button id="closeNav">✕</button>
   </div>
+</nav>
 
-  <div class="items" id="items"></div>
-  <button class="add-item" onclick="openItemPopup()">+</button>
-
-  <div class="nav" id="nav">
-    <button onclick="toggleNav()">Close</button>
-    <button onclick="openCategoryPopup()">+ Add Category</button>
-  </div>
-
-  <!-- Item Popup -->
-  <div class="popup" id="itemPopup">
-    <div class="popup-content">
-      <input id="itemName" placeholder="Product Name">
-      <input id="itemPrice" placeholder="Price">
-      <textarea id="itemMemo" placeholder="Memo"></textarea>
-      <button onclick="addItem()">Add</button>
-    </div>
-  </div>
-
-  <!-- Category Popup -->
-  <div class="popup" id="categoryPopup">
-    <div class="popup-content">
-      <input id="categoryName" placeholder="Category Name">
-      <button onclick="closeCategory()">Add Category</button>
-    </div>
+<!-- ITEM MODAL -->
+<div class="modal hidden" id="itemModal">
+  <div class="modalBox">
+    <button class="closeModal" id="closeItemModal">✕</button>
+    <input id="itemName" placeholder="Product Name">
+    <input id="itemPrice" placeholder="Price">
+    <textarea id="itemMemo" placeholder="Memo"></textarea>
+    <input type="file" id="itemImage" accept="image/*">
+    <button id="addItemBtn">Add</button>
   </div>
 </div>
 
-<script>
-let nav = document.getElementById('nav');
-let items = document.getElementById('items');
-
-function toggleNav(){ nav.classList.toggle('open'); }
-
-function openItemPopup(){ document.getElementById('itemPopup').style.display='flex'; }
-function openCategoryPopup(){ document.getElementById('categoryPopup').style.display='flex'; }
-
-function addItem(){
-  if(items.children.length >= 6) return alert('Max 6 items');
-  const name = itemName.value;
-  if(!name) return;
-  let div = document.createElement('div');
-  div.className='item-card';
-  div.innerText=name;
-  items.appendChild(div);
-  itemPopup.style.display='none';
-  itemName.value=itemPrice.value=itemMemo.value='';
-}
-
-function closeCategory(){
-  categoryPopup.style.display='none';
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>
