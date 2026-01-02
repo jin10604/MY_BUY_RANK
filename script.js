@@ -79,3 +79,4 @@ function clearInputs(){
   memo.value="";
   image.value="";
 }
+
