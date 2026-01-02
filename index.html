@@ -6,8 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
+html,body{
   margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+}
+
+body{
   background:#ffffff;
   font-family: system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
   display:flex;
@@ -16,7 +22,9 @@ body{
 
 .app{
   width:390px;
+  min-height:100vh;
   padding:16px;
+  box-sizing:border-box;
 }
 
 /* Header */
@@ -92,4 +100,18 @@ header{
 <div class="app">
 
 <header>
-  <div class="
+  <div class="logo">My Buy Rank</div>
+  <button class="nav-btn">☰</button>
+</header>
+
+<div class="category-wrap">
+  <div class="category">
+    <div class="list"></div>
+    <button class="more-btn">More</button>
+  </div>
+  <button class="add-btn">+</button>
+</div>
+
+</div>
+</body>
+</html>
