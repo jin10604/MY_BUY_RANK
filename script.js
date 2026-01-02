@@ -19,19 +19,24 @@ document.getElementById("openPopup").onclick=()=>{
 document.getElementById("closePopup").onclick=()=>popup.style.display="none";
 
 document.getElementById("addItemBtn").onclick=()=>{
-  if(!rankInput.value || !productName.value) return alert("Rank와 Product Name은 필수입니다.");
+  if(!rankInput.value||!productName.value)
+    return alert("Rank와 Product Name은 필수입니다.");
 
-  if([...document.querySelectorAll(".item-card")].some(c=>c.dataset.rank===rankInput.value && c!==editTarget))
+  if([...document.querySelectorAll(".item-card")]
+    .some(c=>c.dataset.rank===rankInput.value&&c!==editTarget))
     return alert("Rank가 중복되었습니다.");
 
   let card=editTarget||document.createElement("div");
   card.className="item-card";
   card.dataset.rank=rankInput.value;
-  card.innerHTML=`<div class="edit-btn">✎ 수정</div>
-  <div class="rank-badge">#${rankInput.value}</div>
-  <div>${productName.value}</div>
-  <div>${price.value}</div>
-  <div class="memo-text">${memo.value}</div>`;
+
+  card.innerHTML=`
+    <div class="edit-btn">✎ 수정</div>
+    <div class="rank-badge">#${rankInput.value}</div>
+    <div>${productName.value}</div>
+    <div>${price.value}</div>
+    <div class="memo-text">${memo.value}</div>
+  `;
 
   if(image.files[0]){
     const img=document.createElement("img");
@@ -68,5 +73,9 @@ function sortItems(){
 }
 
 function clearInputs(){
-  rankInput.value=productName.value=price.value=memo.value=image.value="";
+  rankInput.value="";
+  productName.value="";
+  price.value="";
+  memo.value="";
+  image.value="";
 }
