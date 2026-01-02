@@ -4,160 +4,120 @@
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  height:100%;
-  background:#EFF2F9;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  display:flex;
-  justify-content:center;
+body{
+  margin:0; background:#EFF2F9; font-family:system-ui;
+  display:flex; justify-content:center;
 }
-
-.app{
-  width:390px;
-  min-height:100vh;
-  padding:18px;
-  box-sizing:border-box;
-}
-
-/* Header */
+.app{width:390px; min-height:100vh; padding:16px;}
 header{
-  height:56px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  border-radius:22px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 18px; border-radius:24px;
   background:#E4EBF1;
-  box-shadow:
-    -10px -10px 20px #FAFBFF,
-     10px 10px 20px rgba(22,27,45,0.23);
-  margin-bottom:22px;
+  box-shadow:-5px -5px 10px #FAFBFF,5px 5px 10px rgba(22,27,29,.23);
 }
+.nav-btn{border:none;background:none;font-size:20px}
 
-.logo{
-  font-weight:600;
-  color:#2a2f45;
-}
-
-.nav-btn{
-  border:none;
-  background:none;
-  font-size:20px;
-  color:#6E7F8D;
-  cursor:pointer;
-}
-
-/* Category Frame */
 .category{
+  margin-top:20px;
   height:520px;
+  border-radius:32px;
+  background:#E4EBF1;
+  box-shadow:-10px -10px 20px #FAFBFF,10px 10px 20px rgba(22,27,29,.23);
   padding:18px;
-  border-radius:30px;
-  background:#E4EBF1;
-  box-shadow:
-    -10px -10px 20px #FAFBFF,
-     10px 10px 20px rgba(22,27,45,0.23);
-  display:flex;
-  flex-direction:column;
+  display:flex; flex-direction:column;
 }
+.list{flex:1; overflow-y:auto;}
 
-/* List */
-.list{
-  flex:1;
-  overflow-y:auto;
-}
-
-/* Item placeholder */
 .item{
-  height:54px;
-  border-radius:16px;
   background:#EFF2F9;
+  padding:12px 14px;
+  border-radius:18px;
   margin-bottom:12px;
-  box-shadow:
-    inset -6px -6px 10px #FAFBFF,
-    inset  6px  6px 10px rgba(22,27,45,0.18);
-}
-
-/* More Button */
-.more-btn{
-  height:52px;
-  border:none;
-  border-radius:22px;
-  background:#E4EBF1;
-  box-shadow:
-    -6px -6px 10px #FAFBFF,
-     6px  6px 10px rgba(22,27,45,0.23);
-  font-weight:600;
-  color:#2a2f45;
-  cursor:pointer;
-}
-.more-btn:active{
-  box-shadow:
-    inset -6px -6px 10px #FAFBFF,
-    inset  6px  6px 10px rgba(22,27,45,0.23);
-}
-
-/* Nav Menu */
-.nav-menu{
-  position:absolute;
-  top:86px;
-  right:calc(50% - 195px + 18px);
-  width:150px;
-  padding:10px;
-  border-radius:20px;
-  background:#E4EBF1;
-  box-shadow:
-    -10px -10px 20px #FAFBFF,
-     10px 10px 20px rgba(22,27,45,0.23);
-  display:none;
-  z-index:1000;
-}
-
-.nav-menu button{
-  width:100%;
-  border:none;
-  background:none;
-  padding:10px;
-  text-align:left;
+  box-shadow:inset -4px -4px 8px #FAFBFF,inset 4px 4px 8px rgba(22,27,29,.18);
   font-size:14px;
-  color:#2a2f45;
-  cursor:pointer;
+}
+
+.center-add{
+  height:60px; border:none; border-radius:20px;
+  background:#EFF2F9;
+  box-shadow:-6px -6px 12px #FAFBFF,6px 6px 12px rgba(22,27,29,.23);
+  font-size:24px;
+}
+
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.2);
+  display:none; justify-content:center; align-items:center;
+}
+.modal-box{
+  width:320px; background:#E4EBF1;
+  padding:20px; border-radius:24px;
+  box-shadow:-8px -8px 16px #FAFBFF,8px 8px 16px rgba(22,27,29,.23);
+}
+.modal-box input, .modal-box textarea{
+  width:100%; margin-bottom:12px;
+  padding:10px 14px; border:none;
+  border-radius:14px; font-size:14px;
+  background:#EFF2F9;
+  box-shadow:inset -4px -4px 8px #FAFBFF,inset 4px 4px 8px rgba(22,27,29,.18);
+}
+.modal-box button{
+  width:100%; padding:12px;
+  border:none; border-radius:14px;
+  background:#EFF2F9;
+  box-shadow:-4px -4px 8px #FAFBFF,4px 4px 8px rgba(22,27,29,.23);
 }
 </style>
 </head>
 
 <body>
 <div class="app">
-
 <header>
-  <div class="logo">My Buy Rank</div>
-  <button class="nav-btn" onclick="toggleMenu()">☰</button>
+  <div>My Buy Rank</div>
+  <button class="nav-btn" onclick="openModal()">＋</button>
 </header>
 
-<div class="nav-menu" id="menu">
-  <button>+ 카테고리 추가</button>
-</div>
-
 <div class="category">
-  <div class="list">
-    <!-- 구조 확인용 더미 -->
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-  </div>
-  <button class="more-btn">More</button>
+  <div class="list" id="list"></div>
+  <button class="center-add" id="centerBtn" onclick="openModal()">＋</button>
+</div>
 </div>
 
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <input id="name" placeholder="제품명">
+    <input id="price" placeholder="가격">
+    <textarea id="memo" placeholder="메모"></textarea>
+    <button onclick="addItem()">추가</button>
+  </div>
 </div>
 
 <script>
-function toggleMenu(){
-  const m = document.getElementById('menu');
-  m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+let items=[];
+
+function openModal(){
+  if(items.length>=6) return;
+  modal.style.display='flex';
+}
+
+modal.onclick=e=>{if(e.target===modal)modal.style.display='none'}
+
+function addItem(){
+  if(items.length>=6) return alert("아이템은 6개까지입니다");
+  const n=name.value,p=price.value,m=memo.value;
+  if(!n) return;
+  items.push({n,p,m});
+  name.value=price.value=memo.value='';
+  modal.style.display='none';
+  render();
+}
+
+function render(){
+  list.innerHTML='';
+  items.forEach(i=>{
+    list.innerHTML+=`<div class="item">${i.n}<br>${i.p}<br>${i.m}</div>`;
+  });
+  centerBtn.style.display = items.length<6?'block':'none';
 }
 </script>
 </body>
