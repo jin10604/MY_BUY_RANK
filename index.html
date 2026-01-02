@@ -9,7 +9,7 @@
 <div class="app">
 
 <header class="header">
-  <button class="nav-btn">☰</button>
+  <button class="nav-btn" id="openNav">☰</button>
   <h1>MY BUY RANK</h1>
 </header>
 
@@ -23,6 +23,15 @@
     </div>
 
     <div class="frame side-frame"></div>
+  </div>
+</div>
+
+<!-- 오른쪽 네비게이션 -->
+<div class="nav-overlay" id="navOverlay">
+  <div class="nav-panel">
+    <button class="nav-btn" id="closeNav">☰</button>
+    <div class="nav-list" id="categoryList"></div>
+    <button class="add-category-btn" id="addCategoryBtn">＋</button>
   </div>
 </div>
 
