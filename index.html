@@ -4,150 +4,125 @@
 <meta charset="UTF-8">
 <title>My Buy Rank</title>
 <style>
-*{ box-sizing:border-box; margin:0; padding:0; font-family:-apple-system, BlinkMacSystemFont; }
-
-body{
-  background:#d2d5da;
-  display:flex;
-  justify-content:center;
-  padding:40px;
-}
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{margin:0;background:#e1e3e6;height:100vh;display:flex;justify-content:center;align-items:center}
 
 .app{
-  width:390px;
-  min-height:780px;
-  background:#c7ccd1;
-  border-radius:40px;
-  padding:16px;
-  position:relative;
-  overflow:hidden;
+  width:380px;height:720px;
+  background:rgba(255,255,255,0.35);
+  border-radius:30px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  position:relative;overflow:hidden;
 }
 
 /* header */
 .header{
-  background:#d0d4d9;
+  height:64px;margin:20px;
+  background:rgba(255,255,255,.6);
   border-radius:20px;
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
 }
-.header button{
-  border:none;
-  background:none;
-  font-size:20px;
-}
+.menu-btn{font-size:22px;cursor:pointer}
 
-/* card */
-.card{
-  background:#eef1f5;
-  border-radius:30px;
+/* frame */
+.frame{
+  margin:20px;height:560px;
+  background:rgba(255,255,255,.45);
+  border-radius:26px;
   padding:20px;
-  box-shadow:0 0 40px rgba(255,255,255,.8);
+  display:flex;flex-direction:column;
+}
+.items{flex:1;display:flex;flex-direction:column;gap:14px}
+
+/* buttons */
+.btn{
+  border:none;border-radius:18px;
+  padding:14px;background:#fff;
+  cursor:pointer;
 }
 
-/* inputs */
-.card input, .card textarea{
-  width:100%;
-  border:none;
-  background:#f6f8fb;
-  padding:12px 16px;
-  border-radius:20px;
-  margin-bottom:12px;
-  font-size:14px;
+/* popup */
+.popup-bg{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.25);
+  display:none;align-items:center;justify-content:center;
 }
-.card button{
-  width:100%;
-  border:none;
-  background:#f6f8fb;
-  padding:14px;
-  border-radius:20px;
+.popup{
+  width:85%;
+  background:#fff;border-radius:26px;
+  padding:20px;display:flex;flex-direction:column;gap:12px;
 }
-
-/* bottom add */
-.bottom-add{
-  position:absolute;
-  bottom:20px;
-  left:16px;
-  right:16px;
-  height:56px;
-  background:#d0d4d9;
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:22px;
+.popup input,.popup textarea{
+  border:none;border-radius:14px;padding:12px;background:#f3f5f8;
 }
 
 /* nav */
 .nav{
-  position:absolute;
-  top:0;
-  right:-260px;
-  width:260px;
-  height:100%;
-  background:#e2e5ea;
+  position:absolute;top:0;right:-100%;
+  width:80%;height:100%;
+  background:#f7f8fa;
   padding:20px;
   transition:.3s;
 }
-.nav.open{ right:0; }
-
-.nav-close{
-  position:absolute;
-  top:16px;
-  right:16px;
-  border:none;
-  background:none;
-  font-size:20px;
-}
-.nav h3{ margin-bottom:20px; }
-
-/* modal */
-.modal{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,.2);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-.modal.show{ display:flex; }
+.nav.show{right:0}
 </style>
 </head>
-
 <body>
+
 <div class="app">
 
   <div class="header">
-    <span>My Buy Rank</span>
-    <button onclick="toggleNav()">☰</button>
+    <strong>My Buy Rank</strong>
+    <div class="menu-btn" onclick="openNav()">☰</div>
   </div>
 
-  <div class="card">
-    <input placeholder="Product">
-    <input placeholder="Price">
-    <textarea rows="3" placeholder="Memo"></textarea>
-    <button>Add</button>
+  <div class="frame">
+    <div class="items" id="items"></div>
+    <button class="btn" onclick="openPopup()">+ Add Item</button>
   </div>
 
-  <div class="bottom-add">+</div>
+  <!-- popup -->
+  <div class="popup-bg" id="popupBg">
+    <div class="popup">
+      <input id="pName" placeholder="Product name">
+      <input id="pPrice" placeholder="Price">
+      <textarea id="pMemo" placeholder="Memo"></textarea>
+      <button class="btn" onclick="addItem()">Add</button>
+      <button class="btn" onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
 
+  <!-- nav -->
   <div class="nav" id="nav">
-    <button class="nav-close" onclick="toggleNav()">✕</button>
-    <h3>Categories</h3>
-    <div>Category 1</div>
-    <div>Category 2</div>
-    <div>Category 3</div>
-    <div>+ Add Category</div>
+    <button class="btn" onclick="closeNav()">Close</button>
+    <button class="btn">+ Add Category</button>
   </div>
 
 </div>
 
 <script>
-function toggleNav(){
-  document.getElementById("nav").classList.toggle("open");
+const popupBg=document.getElementById("popupBg");
+const items=document.getElementById("items");
+const nav=document.getElementById("nav");
+
+function openPopup(){popupBg.style.display="flex"}
+function closePopup(){popupBg.style.display="none"}
+
+function addItem(){
+  if(items.children.length>=6) return alert("Maximum 6 items");
+  const name=pName.value.trim();
+  if(!name) return;
+  const div=document.createElement("div");
+  div.className="btn";
+  div.textContent=name;
+  items.appendChild(div);
+  pName.value=pPrice.value=pMemo.value="";
+  closePopup();
 }
+
+function openNav(){nav.classList.add("show")}
+function closeNav(){nav.classList.remove("show")}
 </script>
 
 </body>
