@@ -84,3 +84,12 @@ padding:0 18px;font-size:14px;
 width:30%;height:44px;border:none;background:#f8fafc;border-radius:20px;
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);
 }
+
+/* 기존 style.css 전체 그대로 사용 + 아래만 추가 */
+
+.frame-track{
+  display:flex;
+  align-items:center;
+  transition:transform .35s ease;
+}
+
