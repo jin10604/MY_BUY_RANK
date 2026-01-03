@@ -1,96 +1,119 @@
-// ====================== 데이터 저장소 ======================
+/* =======================================
+   MY BUY RANK - FULL SCRIPT
+   기존 프레임 구조 유지 / 슬라이드 이동만
+======================================= */
 
-let frames = [];
-let categories = [];
-let activeFrameId = null;
+let categories = {};
+let order = [];
+let currentIndex = 0;
+let editTarget = null;
 
-// ====================== DOM ======================
+document.addEventListener("DOMContentLoaded", () => {
 
-const frameTrack = document.getElementById('frameTrack');
-const addFrameBtn = document.getElementById('addFrameBtn');
-const categoryList = document.getElementById('categoryList');
-const addCategoryBtn = document.getElementById('addCategoryBtn');
+  const navPanel = document.getElementById("navPanel");
+  const openNav = document.getElementById("openNav");
+  const closeNav = document.getElementById("closeNav");
+  const categoryList = document.getElementById("categoryList");
+  const addCategoryBtn = document.getElementById("addCategoryBtn");
 
-// ====================== 프레임 생성 ======================
+  const frameTrack = document.getElementById("frameTrack");
+  const frameTitle = document.getElementById("frameTitle");
+  const list = document.getElementById("itemList");
 
-function createFrame() {
+  const popup = document.getElementById("popup");
+  const openBtn = document.getElementById("openPopup");
+  const closeBtn = document.getElementById("closePopup");
+  const addBtn = document.getElementById("addItemBtn");
+  const deleteBtn = document.getElementById("deleteItemBtn");
 
-  const id = Date.now().toString();
+  /* 네비게이션 */
+  openNav.onclick = () => navPanel.classList.add("active");
+  closeNav.onclick = () => navPanel.classList.remove("active");
 
-  frames.push({ id });
-  activeFrameId = id;
+  /* 카테고리 추가 */
+  addCategoryBtn.onclick = () => {
+    const name = prompt("Category name?");
+    if (!name || categories[name]) return;
+    categories[name] = [];
+    order.push(name);
+    renderCategories();
+    slideTo(order.length - 1);
+  };
 
-  renderFrames();
-  slideToActiveFrame();
-}
+  function renderCategories(){
+    categoryList.innerHTML="";
+    order.forEach((name,i)=>{
+      const div=document.createElement("div");
+      div.className="category-item";
+      div.textContent=name;
+      div.onclick=()=>slideTo(i);
+      categoryList.appendChild(div);
+    });
+  }
 
-// ====================== 프레임 렌더 ======================
+  /* 카드 슬라이드 */
+  function slideTo(index){
+    currentIndex=index;
+    frameTrack.style.transform=`translateX(${-370*index}px)`;
+    frameTitle.textContent=order[index];
+    renderItems();
+  }
 
-function renderFrames() {
+  /* 팝업 */
+  openBtn.onclick=()=>{
+    popup.style.display="flex";
+    editTarget=null;
+    deleteBtn.style.display="none";
+    clearInputs();
+  };
 
-  frameTrack.innerHTML = '';
+  closeBtn.onclick=()=>popup.style.display="none";
 
-  frames.forEach(frame => {
+  addBtn.onclick=()=>{
+    const cat=order[currentIndex];
+    const r=rank.value.trim();
+    if(!r)return alert("Rank required");
 
-    const div = document.createElement('div');
-    div.className = 'frame';
-    div.innerText = 'EMPTY';
-    div.dataset.id = frame.id;
+    if(categories[cat].some(i=>i.dataset.rank===r && i!==editTarget)){
+      alert("Duplicate rank");return;
+    }
 
-    frameTrack.appendChild(div);
-  });
-}
+    let card=editTarget||document.createElement("div");
+    card.className="item-card";
+    card.dataset.rank=r;
+    card.innerHTML=`<div class="rank-badge">${r}</div><div class="edit-btn">✎</div>
+    <div>${productName.value}</div><div class="memo-text">${memo.value}</div>`;
+    card.querySelector(".edit-btn").onclick=()=>openEdit(card);
 
-// ====================== 슬라이드 이동 ======================
+    categories[cat]=categories[cat].filter(i=>i!==editTarget);
+    categories[cat].push(card);
+    categories[cat].sort((a,b)=>a.dataset.rank-b.dataset.rank);
+    renderItems();
+    popup.style.display="none";
+  };
 
-function slideToActiveFrame() {
+  deleteBtn.onclick=()=>{
+    const cat=order[currentIndex];
+    categories[cat]=categories[cat].filter(i=>i!==editTarget);
+    renderItems();
+    popup.style.display="none";
+  };
 
-  const index = frames.findIndex(f => f.id === activeFrameId);
-  const offset = index * 440;
+  function openEdit(card){
+    editTarget=card;
+    rank.value=card.dataset.rank;
+    popup.style.display="flex";
+    deleteBtn.style.display="block";
+  }
 
-  frameTrack.style.transform = `translateX(${-offset}px)`;
-}
+  function renderItems(){
+    list.innerHTML="";
+    const cat=order[currentIndex];
+    if(!categories[cat])return;
+    categories[cat].forEach(c=>list.appendChild(c));
+  }
 
-// ====================== 카테고리 생성 ======================
-
-addCategoryBtn.onclick = () => {
-
-  if (!activeFrameId) return;
-
-  const id = Date.now().toString();
-
-  categories.push({
-    id,
-    frameId: activeFrameId
-  });
-
-  renderCategories();
-};
-
-// ====================== 카테고리 렌더 ======================
-
-function renderCategories() {
-
-  categoryList.innerHTML = '';
-
-  categories.forEach(cat => {
-
-    const div = document.createElement('div');
-    div.innerText = 'Category';
-    div.onclick = () => {
-
-      activeFrameId = cat.frameId;
-      slideToActiveFrame();
-    };
-
-    categoryList.appendChild(div);
-  });
-}
-
-// ====================== 프레임 추가 버튼 ======================
-
-addFrameBtn.onclick = createFrame;
-
-// ====================== 최초 1개 프레임 생성 ======================
-
-createFrame();
+  function clearInputs(){
+    rank.value=productName.value=price.value=memo.value=image.value="";
+  }
+});
