@@ -1,76 +1,96 @@
-/* 카테고리 데이터 저장 객체 */
-let categories = {};
-let currentIndex = 0;
+// ====================== 데이터 저장소 ======================
 
-/* DOM 연결 */
-const frameTrack = document.getElementById("frameTrack");
-const navPanel   = document.getElementById("navPanel");
-const openNav    = document.getElementById("openNav");
-const closeNav   = document.getElementById("closeNav");
-const addCategoryBtn = document.getElementById("addCategoryBtn");
-const categoryList  = document.getElementById("categoryList");
+let frames = [];
+let categories = [];
+let activeFrameId = null;
 
-/* 네비게이션 열기 / 닫기 */
-openNav.onclick = () => navPanel.classList.add("active");
-closeNav.onclick = () => navPanel.classList.remove("active");
+// ====================== DOM ======================
 
-/* 카테고리 추가 */
-addCategoryBtn.onclick = () => {
-  const name = prompt("Category name?");
-  if (!name || categories[name]) return;
+const frameTrack = document.getElementById('frameTrack');
+const addFrameBtn = document.getElementById('addFrameBtn');
+const categoryList = document.getElementById('categoryList');
+const addCategoryBtn = document.getElementById('addCategoryBtn');
 
-  categories[name] = [];
-  renderCategories();
+// ====================== 프레임 생성 ======================
+
+function createFrame() {
+
+  const id = Date.now().toString();
+
+  frames.push({ id });
+  activeFrameId = id;
+
   renderFrames();
-  slideTo(Object.keys(categories).length - 1);
+  slideToActiveFrame();
+}
+
+// ====================== 프레임 렌더 ======================
+
+function renderFrames() {
+
+  frameTrack.innerHTML = '';
+
+  frames.forEach(frame => {
+
+    const div = document.createElement('div');
+    div.className = 'frame';
+    div.innerText = 'EMPTY';
+    div.dataset.id = frame.id;
+
+    frameTrack.appendChild(div);
+  });
+}
+
+// ====================== 슬라이드 이동 ======================
+
+function slideToActiveFrame() {
+
+  const index = frames.findIndex(f => f.id === activeFrameId);
+  const offset = index * 440;
+
+  frameTrack.style.transform = `translateX(${-offset}px)`;
+}
+
+// ====================== 카테고리 생성 ======================
+
+addCategoryBtn.onclick = () => {
+
+  if (!activeFrameId) return;
+
+  const id = Date.now().toString();
+
+  categories.push({
+    id,
+    frameId: activeFrameId
+  });
+
+  renderCategories();
 };
 
-/* 카테고리 목록 렌더 */
-function renderCategories(){
-  categoryList.innerHTML = "";
-  Object.keys(categories).forEach((name, i) => {
-    const div = document.createElement("div");
-    div.className = "category-item";
-    div.textContent = name;
+// ====================== 카테고리 렌더 ======================
 
-    /* 카테고리 클릭 시 해당 프레임으로 슬라이드 이동 */
-    div.onclick = () => slideTo(i);
+function renderCategories() {
+
+  categoryList.innerHTML = '';
+
+  categories.forEach(cat => {
+
+    const div = document.createElement('div');
+    div.innerText = 'Category';
+    div.onclick = () => {
+
+      activeFrameId = cat.frameId;
+      slideToActiveFrame();
+    };
 
     categoryList.appendChild(div);
   });
 }
 
-/* 프레임 생성 (side / main / side 묶음) */
-function renderFrames(){
-  frameTrack.innerHTML = "";
+// ====================== 프레임 추가 버튼 ======================
 
-  Object.keys(categories).forEach(name => {
-    const sideL = document.createElement("div");
-    sideL.className = "frame side-frame";
+addFrameBtn.onclick = createFrame;
 
-    const main = document.createElement("div");
-    main.className = "frame main-frame";
-    main.innerHTML = `
-      <div class="frame-title">${name}</div>
-      <div class="item-list"></div>
-      <button class="add-btn">＋</button>
-    `;
+// ====================== 최초 1개 프레임 생성 ======================
 
-    const sideR = document.createElement("div");
-    sideR.className = "frame side-frame";
-
-    frameTrack.append(sideL, main, sideR);
-  });
-
-  slideTo(0); // 첫 카테고리 중앙 고정
-}
-
-/* 카드 슬라이드 이동 계산 */
-function slideTo(index){
-  currentIndex = index;
-
-  /* main-frame(330) + margin(20*2) = 370 */
-  const offset = (index * 3 + 1) * 370;
-
-  frameTrack.style.transform = `translateX(-${offset}px)`;
-}
+createFrame();
