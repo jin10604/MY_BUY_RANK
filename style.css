@@ -1,34 +1,78 @@
-body{margin:0;background:#f1f3f5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
-.app{max-width:390px;margin:0 auto;height:100vh;display:flex;flex-direction:column;}
-
-.header{height:56px;display:flex;align-items:center;padding:0 16px;}
-.header h1{margin-left:12px;font-size:14px;}
-
-.nav-btn{width:40px;height:40px;border:none;background:#f8fafc;border-radius:20px;
-box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
-
-/* 네비게이션 패널 - 왼쪽 슬라이드 */
-.nav-panel{
-position:fixed;top:0;left:-260px;width:260px;height:100%;
-background:#f1f3f5;box-shadow:8px 0 16px rgba(0,0,0,0.12);
-transition:.3s;padding:16px;display:flex;flex-direction:column;z-index:99;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui;
 }
-.nav-panel.active{left:0;}
 
-.frame-mask{flex:1;overflow:hidden;display:flex;justify-content:center;align-items:center;}
-.frame-track{display:flex;align-items:center;transition:transform .35s ease;will-change:transform;}
+body {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #f7f7f7;
+}
 
-.frame{background:#e9edf0;border-radius:24px;
-box-shadow:8px 8px 16px rgba(0,0,0,0.12),-8px -8px 16px rgba(255,255,255,0.9);}
+/* ===== 상단바 ===== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
 
-.main-frame{width:330px;height:480px;margin:0 20px;padding:12px;position:relative;}
-.side-frame{width:260px;height:420px;opacity:.5;}
+/* ===== 좌측 카테고리 ===== */
+.category-panel {
+  width: 220px;
+  background: #fff;
+  padding: 70px 10px 10px;
+  border-right: 1px solid #ddd;
+}
 
-.frame-title{text-align:center;font-size:13px;margin-bottom:6px;}
+/* ===== 프레임 영역 ===== */
+.frame-wrapper {
+  flex: 1;
+  padding-top: 70px;
+  position: relative;
+  overflow: hidden;
+}
 
-.add-btn{
-position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
-width:44px;height:44px;border:none;background:#f8fafc;border-radius:20px;
-box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);
-font-size:26px;font-weight:600;cursor:pointer;
+.frame-track {
+  display: flex;
+  height: 100%;
+  transition: transform .4s ease;
+}
+
+/* ===== 카드 프레임 ===== */
+.frame {
+  min-width: 380px;
+  height: 520px;
+  margin: auto 30px;
+  background: #eef1f4;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 프레임 추가 버튼 ===== */
+.add-frame-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  font-size: 26px;
 }
