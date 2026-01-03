@@ -7,10 +7,21 @@ body{margin:0;background:#f1f3f5;font-family:-apple-system,BlinkMacSystemFont,"S
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
 
 .nav-panel{
-position:fixed;top:0;right:-260px;width:260px;height:100%;
-background:#f1f3f5;box-shadow:-8px 0 16px rgba(0,0,0,0.12);
-transition:.3s;padding:16px;display:flex;flex-direction:column;
+position:fixed;
+top:0;
+left:-260px;           /* right → left */
+width:260px;
+height:100%;
+background:#f1f3f5;
+box-shadow:8px 0 16px rgba(0,0,0,0.12);  /* 방향만 변경 */
+transition:.3s;
+padding:16px;
+display:flex;
+flex-direction:column;
+z-index:100;
 }
+.nav-panel.active{left:0;}
+
 .nav-panel.active{right:0;}
 .nav-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .close-nav{border:none;background:#f8fafc;border-radius:14px;padding:6px 12px;
