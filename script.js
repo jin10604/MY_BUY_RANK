@@ -1,50 +1,43 @@
-let categories = [];
-let currentIndex = 0;
+let categories=[];
+let current=0;
 
-/* ===== 네비게이션 열기/닫기 ===== */
-openNav.onclick = () => navPanel.classList.add("active");
-closeNav.onclick = () => navPanel.classList.remove("active");
+openNav.onclick=()=>nav.classList.add("active");
+closeNav.onclick=()=>nav.classList.remove("active");
 
-/* ===== 카테고리 추가 ===== */
-addCategoryBtn.onclick = () => {
-  if(categories.length >= 5) return alert("최대 5개까지 가능합니다.");
-  const name = prompt("카테고리 이름");
+addCategoryBtn.onclick=()=>{
+  if(categories.length>=5) return alert("최대 5개");
+  const name=prompt("Category name");
   if(!name) return;
-  categories.push({name, items:[]});
-  renderCategories();
-  renderFrames();
+  categories.push({name,items:[]});
+  render();
 };
 
-/* ===== 렌더링 ===== */
-function renderCategories(){
+function render(){
   categoryList.innerHTML="";
-  categories.forEach((c,i)=>{
-    const li = document.createElement("li");
-    li.textContent = c.name;
-    li.onclick=()=>moveToFrame(i);
-    categoryList.appendChild(li);
-  });
-}
-
-function renderFrames(){
   frameTrack.innerHTML="";
   categories.forEach((c,i)=>{
-    const frame = document.createElement("div");
-    frame.className="frame";
-    frame.innerHTML=`<h2>${c.name}</h2><button class="addBtn" onclick="openPopup(${i})">+</button>`;
+    const cat=document.createElement("div");
+    cat.textContent=c.name;
+    cat.onclick=()=>move(i);
+    categoryList.appendChild(cat);
+
+    const frame=document.createElement("div");
+    frame.className="frame"+(i===current?"":" inactive");
+    frame.innerHTML=`<h3>${c.name}</h3><button class="add-item-btn" onclick="openPopup(${i})">＋</button>`;
     frameTrack.appendChild(frame);
   });
-  moveToFrame(currentIndex);
+  move(current);
 }
 
-/* ===== 슬라이드 이동 ===== */
-function moveToFrame(i){
-  currentIndex=i;
-  frameTrack.style.transform=`translateX(${-i*360}px)`;
+function move(i){
+  current=i;
+  frameTrack.style.transform=`translateX(${-i*340}px)`;
+  document.querySelectorAll(".frame").forEach((f,idx)=>{
+    f.classList.toggle("inactive",idx!==i);
+  });
 }
 
-/* ===== 팝업 ===== */
 function openPopup(i){
   popup.style.display="flex";
 }
-cancelPopupBtn.onclick=()=>popup.style.display="none";
+closePopupBtn.onclick=()=>popup.style.display="none";
