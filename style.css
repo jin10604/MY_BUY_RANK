@@ -6,17 +6,19 @@ body{margin:0;background:#f1f3f5;font-family:-apple-system,BlinkMacSystemFont,"S
 .nav-btn{width:40px;height:40px;border:none;background:#f8fafc;border-radius:20px;
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
 
-/* LEFT SLIDE NAV - transform 방식 */
+/* LEFT SLIDE NAV */
 .nav-panel{
 position:fixed;top:0;left:0;width:260px;height:100%;
-background:#f1f3f5;
-box-shadow:8px 0 16px rgba(0,0,0,0.12);
+background:#f1f3f5;box-shadow:8px 0 16px rgba(0,0,0,0.12);
 transform:translateX(-100%);
-transition:.3s;
-padding:16px;display:flex;flex-direction:column;
+transition:.3s;padding:16px;display:flex;flex-direction:column;
 z-index:100;
+pointer-events:none;
 }
-.nav-panel.active{transform:translateX(0);}
+.nav-panel.active{
+transform:translateX(0);
+pointer-events:auto;
+}
 
 .nav-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .close-nav{border:none;background:#f8fafc;border-radius:14px;padding:6px 12px;
@@ -24,20 +26,8 @@ box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
 
 .top-add{margin-bottom:12px;}
 
-.category-item{
-display:flex;justify-content:space-between;align-items:center;
-padding:10px;border-radius:14px;background:#f8fafc;margin-bottom:8px;
-box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);
-cursor:pointer;
-}
-
-.cat-edit{
-font-size:14px;
-padding:4px 8px;
-border-radius:10px;
-background:#f8fafc;
-box-shadow:2px 2px 4px rgba(0,0,0,0.12),-2px -2px 4px rgba(255,255,255,0.9);
-}
+.category-item{padding:10px;border-radius:14px;background:#f8fafc;margin-bottom:8px;
+box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);cursor:pointer;}
 
 .add-category{border:none;height:44px;border-radius:20px;background:#f8fafc;
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
@@ -89,11 +79,4 @@ padding:0 18px;font-size:14px;
 .popup-actions button{
 width:30%;height:44px;border:none;background:#f8fafc;border-radius:20px;
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);
-}
-
-/* CATEGORY MANAGE POPUP */
-.cat-title{
-text-align:center;
-font-size:15px;
-cursor:pointer;
 }
