@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>MY BUY RANK</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>MY BUY RANK</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="app">
 
-<header class="header">
-  <button id="openNav">≡</button>
-  <h1>MY BUY RANK</h1>
-</header>
+  <header class="header">
+    <button class="nav-btn" id="openNav">☰</button>
+    <h1>MY BUY RANK</h1>
+  </header>
 
-<nav id="nav">
-  <div class="nav-header">
-    CATEGORY
-    <button id="closeNav">✕</button>
+  <!-- Navigation Panel -->
+  <div class="nav-panel" id="navPanel">
+    <div class="nav-header">
+      <button class="close-nav" id="closeNav">✕</button>
+      <span>CATEGORY</span>
+    </div>
+
+    <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
+    <div class="category-list" id="categoryList"></div>
   </div>
-  <div id="categoryList"></div>
-  <button id="addCategoryBtn">＋ Add Category</button>
-</nav>
 
-<main>
   <div class="frame-mask">
-    <div id="frameTrack" class="frame-track"></div>
-  </div>
-</main>
+    <div class="frame-track" id="frameTrack">
+      <div class="frame side-frame"></div>
 
-<div id="popup" class="popup-overlay">
-  <div class="popup">
-    <input id="rankInput" placeholder="Rank">
-    <input id="nameInput" placeholder="Product name">
-    <textarea id="memoInput" placeholder="Memo"></textarea>
-    <div class="popup-btns">
-      <button id="saveItemBtn">Add</button>
-      <button id="closePopupBtn">Cancel</button>
+      <div class="frame main-frame" id="mainFrame">
+        <div class="frame-title" id="frameTitle">Select Category</div>
+        <div class="item-list" id="itemList"></div>
+        <button class="add-btn" id="openPopup">＋</button>
+      </div>
+
+      <div class="frame side-frame"></div>
     </div>
   </div>
-</div>
 
+  <div class="popup-overlay" id="popup">
+    <div class="popup-card">
+      <input type="number" id="rank" placeholder="Rank">
+      <input type="text" id="productName" placeholder="Product Name">
+      <input type="text" id="price" placeholder="Price">
+      <textarea id="memo" placeholder="Memo"></textarea>
+      <input type="file" id="image">
+      <div class="popup-actions">
+        <button id="addItemBtn">Add</button>
+        <button id="deleteItemBtn">Delete</button>
+        <button id="closePopup">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
 <script src="script.js"></script>
 </body>
 </html>
