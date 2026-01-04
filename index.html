@@ -7,38 +7,34 @@
 </head>
 <body>
 
-<!-- ===== 상단 헤더 ===== -->
-<header>
+<header class="header">
   <button id="openNav">≡</button>
   <h1>MY BUY RANK</h1>
 </header>
 
-<!-- ===== 사이드 네비게이션 ===== -->
-<nav id="navPanel">
+<nav id="nav">
   <div class="nav-header">
     CATEGORY
     <button id="closeNav">✕</button>
   </div>
-  <button id="addCategoryBtn">+ Add Category</button>
-  <ul id="categoryList"></ul>
+  <div id="categoryList"></div>
+  <button id="addCategoryBtn">＋ Add Category</button>
 </nav>
 
-<!-- ===== 메인 프레임 영역 ===== -->
 <main>
   <div class="frame-mask">
     <div id="frameTrack" class="frame-track"></div>
   </div>
 </main>
 
-<!-- ===== 아이템 추가 팝업 ===== -->
-<div class="popup-overlay" id="popup">
+<div id="popup" class="popup-overlay">
   <div class="popup">
     <input id="rankInput" placeholder="Rank">
-    <input id="nameInput" placeholder="Product Name">
+    <input id="nameInput" placeholder="Product name">
     <textarea id="memoInput" placeholder="Memo"></textarea>
     <div class="popup-btns">
-      <button id="addItemBtn">Add</button>
-      <button id="cancelPopupBtn">Cancel</button>
+      <button id="saveItemBtn">Add</button>
+      <button id="closePopupBtn">Cancel</button>
     </div>
   </div>
 </div>
