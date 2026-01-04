@@ -1,51 +1,48 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>MY BUY RANK</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>MY BUY RANK</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
 
-  <!-- ===== Header ===== -->
-  <header class="header">
-    <button class="nav-btn" id="openNav">☰</button>
-    <h1>MY BUY RANK</h1>
-  </header>
+<!-- ===== 상단 헤더 ===== -->
+<header>
+  <button id="openNav">≡</button>
+  <h1>MY BUY RANK</h1>
+</header>
 
-  <!-- ===== Navigation ===== -->
-  <div class="nav-panel" id="navPanel">
-    <div class="nav-header">
-      <span>CATEGORY</span>
-      <button class="close-nav" id="closeNav">✕</button>
-    </div>
-    <div class="category-list" id="categoryList"></div>
-    <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
+<!-- ===== 사이드 네비게이션 ===== -->
+<nav id="navPanel">
+  <div class="nav-header">
+    CATEGORY
+    <button id="closeNav">✕</button>
   </div>
+  <button id="addCategoryBtn">+ Add Category</button>
+  <ul id="categoryList"></ul>
+</nav>
 
-  <!-- ===== Frames ===== -->
+<!-- ===== 메인 프레임 영역 ===== -->
+<main>
   <div class="frame-mask">
-    <div class="frame-track" id="frameTrack">
-      <!-- JS에서 프레임 동적 생성 -->
+    <div id="frameTrack" class="frame-track"></div>
+  </div>
+</main>
+
+<!-- ===== 아이템 추가 팝업 ===== -->
+<div class="popup-overlay" id="popup">
+  <div class="popup">
+    <input id="rankInput" placeholder="Rank">
+    <input id="nameInput" placeholder="Product Name">
+    <textarea id="memoInput" placeholder="Memo"></textarea>
+    <div class="popup-btns">
+      <button id="addItemBtn">Add</button>
+      <button id="cancelPopupBtn">Cancel</button>
     </div>
   </div>
-
-  <!-- ===== Popup ===== -->
-  <div class="popup-overlay" id="popup">
-    <div class="popup-card">
-      <input type="number" id="rank" placeholder="Rank">
-      <input type="text" id="productName" placeholder="Product Name">
-      <textarea id="memo" placeholder="Memo"></textarea>
-      <div class="popup-actions">
-        <button id="addItemBtn">Add</button>
-        <button id="deleteItemBtn">Delete</button>
-        <button id="closePopup">Cancel</button>
-      </div>
-    </div>
-  </div>
-
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
