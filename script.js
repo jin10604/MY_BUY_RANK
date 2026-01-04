@@ -1,73 +1,71 @@
-/* ===============================
-   MY BUY RANK – FIXED VERSION
-   프레임 1개 유지 / 카테고리 전환
-=============================== */
+const frameTrack = document.getElementById("frameTrack");
+const categoryList = document.getElementById("categoryList");
+const popup = document.getElementById("popup");
 
-let categories = {};
-let currentCategory = null;
-let editTarget = null;
+let frames = [];
+let currentIndex = -1;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.getElementById("addCategoryBtn").onclick = () => {
+  if(frames.length >= 5) return alert("카테고리는 최대 5개입니다.");
 
-  const navPanel = document.getElementById("navPanel");
-  const categoryList = document.getElementById("categoryList");
-  const frameTitle = document.getElementById("frameTitle");
-  const itemList = document.getElementById("itemList");
+  const name = prompt("Category name?");
+  if(!name) return;
 
-  openNav.onclick = () => navPanel.classList.add("active");
-  closeNav.onclick = () => navPanel.classList.remove("active");
+  createFrame(name);
+};
 
-  /* 카테고리 추가 */
-  addCategoryBtn.onclick = () => {
-    const name = prompt("Category name?");
-    if(!name || categories[name]) return;
-    categories[name] = [];
-    renderCategories();
-    selectCategory(name);
-  };
+function createFrame(name){
+  // ===== 프레임 DOM 생성 =====
+  const frame = document.createElement("div");
+  frame.className = "frame main-frame";
+  frame.innerHTML = `
+    <div class="frame-title">${name}</div>
+    <div class="item-list"></div>
+    <button class="add-btn">＋</button>
+  `;
 
-  function renderCategories(){
-    categoryList.innerHTML="";
-    Object.keys(categories).forEach(name=>{
-      const div=document.createElement("div");
-      div.className="category-item";
-      div.textContent=name;
-      div.onclick=()=>selectCategory(name);
-      categoryList.appendChild(div);
-    });
-  }
+  frame.querySelector(".add-btn").onclick = () => openPopup(frame);
+  frameTrack.appendChild(frame);
+  frames.push(frame);
 
-  function selectCategory(name){
-    currentCategory=name;
-    frameTitle.textContent=name;
-    navPanel.classList.remove("active");
-    renderItems();
-  }
+  renderCategories();
+  slideTo(frames.length-1);
+}
 
-  /* 팝업 열기 */
-  openPopup.onclick=()=>{
-    if(!currentCategory)return alert("Select category first");
-    popup.style.display="flex";
-    editTarget=null;
-  };
+function renderCategories(){
+  categoryList.innerHTML="";
+  frames.forEach((f,i)=>{
+    const div=document.createElement("div");
+    div.className="category-item";
+    div.textContent=f.querySelector(".frame-title").textContent;
+    div.onclick=()=>slideTo(i);
+    categoryList.appendChild(div);
+  });
+}
 
-  closePopup.onclick=()=>popup.style.display="none";
+function slideTo(index){
+  currentIndex=index;
+  frameTrack.style.transform=`translateX(${-350*index}px)`;
+  frames.forEach((f,i)=>{
+    f.className = "frame " + (i===index?"main-frame":"side-frame");
+  });
+}
 
-  addItemBtn.onclick=()=>{
-    const r=rank.value.trim();
-    if(!r)return;
+/* ===== Popup ===== */
+let currentFrame=null;
 
-    let card=editTarget||document.createElement("div");
-    card.className="item-card";
-    card.dataset.rank=r;
-    card.innerHTML=`<div>${r}</div><div>${productName.value}</div><div>${memo.value}</div>`;
-    categories[currentCategory].push(card);
-    renderItems();
-    popup.style.display="none";
-  };
+function openPopup(frame){
+  currentFrame=frame;
+  popup.style.display="flex";
+}
 
-  function renderItems(){
-    itemList.innerHTML="";
-    categories[currentCategory].forEach(c=>itemList.appendChild(c));
-  }
-});
+document.getElementById("closePopup").onclick=()=>popup.style.display="none";
+
+document.getElementById("addItemBtn").onclick=()=>{
+  const list=currentFrame.querySelector(".item-list");
+  const card=document.createElement("div");
+  card.className="item-card";
+  card.textContent=document.getElementById("productName").value;
+  list.appendChild(card);
+  popup.style.display="none";
+};
