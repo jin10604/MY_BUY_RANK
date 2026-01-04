@@ -1,119 +1,73 @@
-/* =======================================
-   MY BUY RANK - FULL SCRIPT
-   기존 프레임 구조 유지 / 슬라이드 이동만
-======================================= */
+/* ===============================
+   MY BUY RANK – FIXED VERSION
+   프레임 1개 유지 / 카테고리 전환
+=============================== */
 
 let categories = {};
-let order = [];
-let currentIndex = 0;
+let currentCategory = null;
 let editTarget = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
   const navPanel = document.getElementById("navPanel");
-  const openNav = document.getElementById("openNav");
-  const closeNav = document.getElementById("closeNav");
   const categoryList = document.getElementById("categoryList");
-  const addCategoryBtn = document.getElementById("addCategoryBtn");
-
-  const frameTrack = document.getElementById("frameTrack");
   const frameTitle = document.getElementById("frameTitle");
-  const list = document.getElementById("itemList");
+  const itemList = document.getElementById("itemList");
 
-  const popup = document.getElementById("popup");
-  const openBtn = document.getElementById("openPopup");
-  const closeBtn = document.getElementById("closePopup");
-  const addBtn = document.getElementById("addItemBtn");
-  const deleteBtn = document.getElementById("deleteItemBtn");
-
-  /* 네비게이션 */
   openNav.onclick = () => navPanel.classList.add("active");
   closeNav.onclick = () => navPanel.classList.remove("active");
 
   /* 카테고리 추가 */
   addCategoryBtn.onclick = () => {
     const name = prompt("Category name?");
-    if (!name || categories[name]) return;
+    if(!name || categories[name]) return;
     categories[name] = [];
-    order.push(name);
     renderCategories();
-    slideTo(order.length - 1);
+    selectCategory(name);
   };
 
   function renderCategories(){
     categoryList.innerHTML="";
-    order.forEach((name,i)=>{
+    Object.keys(categories).forEach(name=>{
       const div=document.createElement("div");
       div.className="category-item";
       div.textContent=name;
-      div.onclick=()=>slideTo(i);
+      div.onclick=()=>selectCategory(name);
       categoryList.appendChild(div);
     });
   }
 
-  /* 카드 슬라이드 */
-  function slideTo(index){
-    currentIndex=index;
-    frameTrack.style.transform=`translateX(${-370*index}px)`;
-    frameTitle.textContent=order[index];
+  function selectCategory(name){
+    currentCategory=name;
+    frameTitle.textContent=name;
+    navPanel.classList.remove("active");
     renderItems();
   }
 
-  /* 팝업 */
-  openBtn.onclick=()=>{
+  /* 팝업 열기 */
+  openPopup.onclick=()=>{
+    if(!currentCategory)return alert("Select category first");
     popup.style.display="flex";
     editTarget=null;
-    deleteBtn.style.display="none";
-    clearInputs();
   };
 
-  closeBtn.onclick=()=>popup.style.display="none";
+  closePopup.onclick=()=>popup.style.display="none";
 
-  addBtn.onclick=()=>{
-    const cat=order[currentIndex];
+  addItemBtn.onclick=()=>{
     const r=rank.value.trim();
-    if(!r)return alert("Rank required");
-
-    if(categories[cat].some(i=>i.dataset.rank===r && i!==editTarget)){
-      alert("Duplicate rank");return;
-    }
+    if(!r)return;
 
     let card=editTarget||document.createElement("div");
     card.className="item-card";
     card.dataset.rank=r;
-    card.innerHTML=`<div class="rank-badge">${r}</div><div class="edit-btn">✎</div>
-    <div>${productName.value}</div><div class="memo-text">${memo.value}</div>`;
-    card.querySelector(".edit-btn").onclick=()=>openEdit(card);
-
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    categories[cat].push(card);
-    categories[cat].sort((a,b)=>a.dataset.rank-b.dataset.rank);
+    card.innerHTML=`<div>${r}</div><div>${productName.value}</div><div>${memo.value}</div>`;
+    categories[currentCategory].push(card);
     renderItems();
     popup.style.display="none";
   };
-
-  deleteBtn.onclick=()=>{
-    const cat=order[currentIndex];
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    renderItems();
-    popup.style.display="none";
-  };
-
-  function openEdit(card){
-    editTarget=card;
-    rank.value=card.dataset.rank;
-    popup.style.display="flex";
-    deleteBtn.style.display="block";
-  }
 
   function renderItems(){
-    list.innerHTML="";
-    const cat=order[currentIndex];
-    if(!categories[cat])return;
-    categories[cat].forEach(c=>list.appendChild(c));
-  }
-
-  function clearInputs(){
-    rank.value=productName.value=price.value=memo.value=image.value="";
+    itemList.innerHTML="";
+    categories[currentCategory].forEach(c=>itemList.appendChild(c));
   }
 });
