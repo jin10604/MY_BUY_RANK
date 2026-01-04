@@ -8,46 +8,42 @@
 <body>
 <div class="app">
 
-<header class="header">
-  <button class="nav-btn" id="openNav">☰</button>
-  <h1>MY BUY RANK</h1>
-</header>
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <button class="nav-btn" id="openNav">☰</button>
+    <h1>MY BUY RANK</h1>
+  </header>
 
-<!-- ===== Navigation ===== -->
-<div class="nav-panel" id="navPanel">
-  <div class="nav-header">
-    <span>CATEGORY</span>
-    <button class="close-nav" id="closeNav">✕</button>
+  <!-- ===== Navigation ===== -->
+  <div class="nav-panel" id="navPanel">
+    <div class="nav-header">
+      <span>CATEGORY</span>
+      <button class="close-nav" id="closeNav">✕</button>
+    </div>
+    <div class="category-list" id="categoryList"></div>
+    <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
   </div>
 
-  <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
-  <div class="category-list" id="categoryList"></div>
-</div>
-
-<!-- ===== Main Frame ===== -->
-<div class="frame-mask">
-  <div class="frame-track">
-    <div class="frame main-frame">
-      <div class="frame-title" id="frameTitle">Select Category</div>
-      <div class="item-list" id="itemList"></div>
-      <button class="add-btn" id="openPopup">＋</button>
+  <!-- ===== Frames ===== -->
+  <div class="frame-mask">
+    <div class="frame-track" id="frameTrack">
+      <!-- JS에서 프레임 동적 생성 -->
     </div>
   </div>
-</div>
 
-<!-- ===== Popup ===== -->
-<div class="popup-overlay" id="popup">
-  <div class="popup-card">
-    <input type="number" id="rank" placeholder="Rank">
-    <input type="text" id="productName" placeholder="Product Name">
-    <textarea id="memo" placeholder="Memo"></textarea>
-    <div class="popup-actions">
-      <button id="addItemBtn">Add</button>
-      <button id="deleteItemBtn">Delete</button>
-      <button id="closePopup">Cancel</button>
+  <!-- ===== Popup ===== -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup-card">
+      <input type="number" id="rank" placeholder="Rank">
+      <input type="text" id="productName" placeholder="Product Name">
+      <textarea id="memo" placeholder="Memo"></textarea>
+      <div class="popup-actions">
+        <button id="addItemBtn">Add</button>
+        <button id="deleteItemBtn">Delete</button>
+        <button id="closePopup">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
 
 </div>
 <script src="script.js"></script>
