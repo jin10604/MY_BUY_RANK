@@ -1,110 +1,70 @@
 let categories = {};
 let order = [];
 let currentIndex = 0;
-let editTarget = null;
+let editCategory = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-  const navPanel = document.getElementById("navPanel");
-  const openNav = document.getElementById("openNav");
-  const closeNav = document.getElementById("closeNav");
-  const categoryList = document.getElementById("categoryList");
-  const addCategoryBtn = document.getElementById("addCategoryBtn");
+const catPopup=document.getElementById("catPopup");
+const catTitle=document.getElementById("catTitle");
+const catRank=document.getElementById("catRank");
+const deleteCategoryBtn=document.getElementById("deleteCategoryBtn");
+const closeCatPopup=document.getElementById("closeCatPopup");
 
-  const frameTrack = document.getElementById("frameTrack");
-  const frameTitle = document.getElementById("frameTitle");
-  const list = document.getElementById("itemList");
+addCategoryBtn.onclick=()=>{
+ const name=prompt("Category name?");
+ if(!name)return;
+ categories[name]=[];
+ order.push({name,rank:order.length+1});
+ renderCategories(); sortByRank();
+};
 
-  const popup = document.getElementById("popup");
-  const openBtn = document.getElementById("openPopup");
-  const closeBtn = document.getElementById("closePopup");
-  const addBtn = document.getElementById("addItemBtn");
-  const deleteBtn = document.getElementById("deleteItemBtn");
+function renderCategories(){
+ categoryList.innerHTML="";
+ order.forEach((c,i)=>{
+  const div=document.createElement("div");
+  div.className="category-item";
+  div.innerHTML=`<span>${c.name}</span><span class="cat-edit">✎</span>`;
+  div.querySelector("span").onclick=()=>slideTo(i);
+  div.querySelector(".cat-edit").onclick=()=>openCatPopup(c);
+  categoryList.appendChild(div);
+ });
+}
 
-  openNav.onclick = () => navPanel.classList.add("active");
-  closeNav.onclick = () => navPanel.classList.remove("active");
+function openCatPopup(cat){
+ editCategory=cat;
+ catPopup.style.display="flex";
+ catTitle.textContent=cat.name;
+ catRank.value=cat.rank;
+ catTitle.onclick=()=>{
+  const n=prompt("Rename",cat.name);
+  if(!n||categories[n])return;
+  categories[n]=categories[cat.name];
+  delete categories[cat.name];
+  cat.name=n;
+  renderCategories();
+ };
+}
 
-  addCategoryBtn.onclick = () => {
-    const name = prompt("Category name?");
-    if (!name || categories[name]) return;
-    categories[name] = [];
-    order.push(name);
-    renderCategories();
-    slideTo(order.length - 1);
-  };
+catRank.onchange=()=>{
+ editCategory.rank=parseInt(catRank.value);
+ sortByRank();
+};
 
-  function renderCategories(){
-    categoryList.innerHTML="";
-    order.forEach((name,i)=>{
-      const div=document.createElement("div");
-      div.className="category-item";
-      div.textContent=name;
-      div.onclick=()=>slideTo(i);
-      categoryList.appendChild(div);
-    });
-  }
+function sortByRank(){
+ order.sort((a,b)=>a.rank-b.rank);
+ renderCategories();
+ slideTo(0);
+}
 
-  function slideTo(index){
-    currentIndex=index;
-    frameTrack.style.transform=`translateX(${-370*index}px)`;
-    frameTitle.textContent=order[index];
-    renderItems();
-  }
+deleteCategoryBtn.onclick=()=>{
+ if(!confirm("Delete?"))return;
+ delete categories[editCategory.name];
+ order=order.filter(o=>o!==editCategory);
+ catPopup.style.display="none";
+ renderCategories();
+};
 
-  openBtn.onclick=()=>{
-    popup.style.display="flex";
-    editTarget=null;
-    deleteBtn.style.display="none";
-    clearInputs();
-  };
+closeCatPopup.onclick=()=>catPopup.style.display="none";
 
-  closeBtn.onclick=()=>popup.style.display="none";
-
-  addBtn.onclick=()=>{
-    const cat=order[currentIndex];
-    const r=rank.value.trim();
-    if(!r)return alert("Rank required");
-
-    if(categories[cat].some(i=>i.dataset.rank===r && i!==editTarget)){
-      alert("Duplicate rank");return;
-    }
-
-    let card=editTarget||document.createElement("div");
-    card.className="item-card";
-    card.dataset.rank=r;
-    card.innerHTML=`<div class="rank-badge">${r}</div><div class="edit-btn">✎</div>
-    <div>${productName.value}</div><div class="memo-text">${memo.value}</div>`;
-    card.querySelector(".edit-btn").onclick=()=>openEdit(card);
-
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    categories[cat].push(card);
-    categories[cat].sort((a,b)=>a.dataset.rank-b.dataset.rank);
-    renderItems();
-    popup.style.display="none";
-  };
-
-  deleteBtn.onclick=()=>{
-    const cat=order[currentIndex];
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    renderItems();
-    popup.style.display="none";
-  };
-
-  function openEdit(card){
-    editTarget=card;
-    rank.value=card.dataset.rank;
-    popup.style.display="flex";
-    deleteBtn.style.display="block";
-  }
-
-  function renderItems(){
-    list.innerHTML="";
-    const cat=order[currentIndex];
-    if(!categories[cat])return;
-    categories[cat].forEach(c=>list.appendChild(c));
-  }
-
-  function clearInputs(){
-    rank.value=productName.value=price.value=memo.value=image.value="";
-  }
 });
