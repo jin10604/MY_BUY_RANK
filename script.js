@@ -1,71 +1,50 @@
-const frameTrack = document.getElementById("frameTrack");
-const categoryList = document.getElementById("categoryList");
-const popup = document.getElementById("popup");
+let categories = [];
+let currentIndex = 0;
 
-let frames = [];
-let currentIndex = -1;
+/* ===== 네비게이션 열기/닫기 ===== */
+openNav.onclick = () => navPanel.classList.add("active");
+closeNav.onclick = () => navPanel.classList.remove("active");
 
-document.getElementById("addCategoryBtn").onclick = () => {
-  if(frames.length >= 5) return alert("카테고리는 최대 5개입니다.");
-
-  const name = prompt("Category name?");
+/* ===== 카테고리 추가 ===== */
+addCategoryBtn.onclick = () => {
+  if(categories.length >= 5) return alert("최대 5개까지 가능합니다.");
+  const name = prompt("카테고리 이름");
   if(!name) return;
-
-  createFrame(name);
+  categories.push({name, items:[]});
+  renderCategories();
+  renderFrames();
 };
 
-function createFrame(name){
-  // ===== 프레임 DOM 생성 =====
-  const frame = document.createElement("div");
-  frame.className = "frame main-frame";
-  frame.innerHTML = `
-    <div class="frame-title">${name}</div>
-    <div class="item-list"></div>
-    <button class="add-btn">＋</button>
-  `;
-
-  frame.querySelector(".add-btn").onclick = () => openPopup(frame);
-  frameTrack.appendChild(frame);
-  frames.push(frame);
-
-  renderCategories();
-  slideTo(frames.length-1);
-}
-
+/* ===== 렌더링 ===== */
 function renderCategories(){
   categoryList.innerHTML="";
-  frames.forEach((f,i)=>{
-    const div=document.createElement("div");
-    div.className="category-item";
-    div.textContent=f.querySelector(".frame-title").textContent;
-    div.onclick=()=>slideTo(i);
-    categoryList.appendChild(div);
+  categories.forEach((c,i)=>{
+    const li = document.createElement("li");
+    li.textContent = c.name;
+    li.onclick=()=>moveToFrame(i);
+    categoryList.appendChild(li);
   });
 }
 
-function slideTo(index){
-  currentIndex=index;
-  frameTrack.style.transform=`translateX(${-350*index}px)`;
-  frames.forEach((f,i)=>{
-    f.className = "frame " + (i===index?"main-frame":"side-frame");
+function renderFrames(){
+  frameTrack.innerHTML="";
+  categories.forEach((c,i)=>{
+    const frame = document.createElement("div");
+    frame.className="frame";
+    frame.innerHTML=`<h2>${c.name}</h2><button class="addBtn" onclick="openPopup(${i})">+</button>`;
+    frameTrack.appendChild(frame);
   });
+  moveToFrame(currentIndex);
 }
 
-/* ===== Popup ===== */
-let currentFrame=null;
+/* ===== 슬라이드 이동 ===== */
+function moveToFrame(i){
+  currentIndex=i;
+  frameTrack.style.transform=`translateX(${-i*360}px)`;
+}
 
-function openPopup(frame){
-  currentFrame=frame;
+/* ===== 팝업 ===== */
+function openPopup(i){
   popup.style.display="flex";
 }
-
-document.getElementById("closePopup").onclick=()=>popup.style.display="none";
-
-document.getElementById("addItemBtn").onclick=()=>{
-  const list=currentFrame.querySelector(".item-list");
-  const card=document.createElement("div");
-  card.className="item-card";
-  card.textContent=document.getElementById("productName").value;
-  list.appendChild(card);
-  popup.style.display="none";
-};
+cancelPopupBtn.onclick=()=>popup.style.display="none";
