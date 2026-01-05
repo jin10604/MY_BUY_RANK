@@ -16,25 +16,15 @@ box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);curs
 .add-category{margin-top:auto;border:none;height:44px;border-radius:20px;background:#f8fafc;
 box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
 .frame-mask{flex:1;overflow:hidden;display:flex;justify-content:center;align-items:center;}
-.frame-track{display:flex;transition:transform .35s ease;}
+.frame-track{display:flex;align-items:center;transition:transform .35s ease;}
 .frame{background:#e9edf0;border-radius:24px;
 box-shadow:8px 8px 16px rgba(0,0,0,0.12),-8px -8px 16px rgba(255,255,255,0.9);}
-.main-frame{width:330px;height:480px;margin:0 20px;padding:12px;position:relative;}
+.main-frame{width:330px;height:480px;margin:0 20px;padding:12px;position:relative;overflow:hidden;}
+.side-frame{width:260px;height:420px;opacity:.5;}
 .frame-title{text-align:center;font-size:13px;margin-bottom:6px;}
 .item-list{display:flex;flex-direction:column;gap:8px;height:100%;overflow-y:auto;padding-bottom:60px;}
-.add-btn{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+.add-btn{
+position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
 width:44px;height:44px;border:none;background:#f8fafc;border-radius:20px;
-box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);font-size:26px;}
-.popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;
-background:rgba(0,0,0,0.2);display:none;justify-content:center;align-items:center;}
-.popup-card{width:300px;padding:20px;background:#f8fafc;border-radius:24px;
-box-shadow:8px 8px 16px rgba(0,0,0,0.12),-8px -8px 16px rgba(255,255,255,0.9);
-display:flex;flex-direction:column;gap:12px;}
-.popup-card input,.popup-card textarea{
-border:none;border-radius:18px;background:#f8fafc;height:44px;
-box-shadow:inset 2px 2px 4px rgba(0,0,0,0.08),inset -2px -2px 4px rgba(255,255,255,0.8);
-padding:0 18px;font-size:14px;}
-.popup-actions{display:flex;justify-content:space-between;}
-.popup-actions button{
-width:30%;height:44px;border:none;background:#f8fafc;border-radius:20px;
-box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);}
+box-shadow:4px 4px 8px rgba(0,0,0,0.12),-4px -4px 8px rgba(255,255,255,0.9);
+font-size:26px;font-weight:600;cursor:pointer;}
