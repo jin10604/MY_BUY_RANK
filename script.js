@@ -1,51 +1,45 @@
-let categories={},order=[],currentIndex=0;
+const nav=document.getElementById("sideNav");
+openNav.onclick=()=>nav.classList.add("active");
+closeNav.onclick=()=>nav.classList.remove("active");
 
-document.addEventListener("DOMContentLoaded",()=>{
-openNav.onclick=()=>navPanel.classList.add("active");
-closeNav.onclick=()=>navPanel.classList.remove("active");
+const frameTrack=document.getElementById("frameTrack");
+const categories=[];
 
-addCategoryBtn.onclick=()=>{
+document.getElementById("addCategory").onclick=()=>{
  const name=prompt("Category name?");
- if(!name||categories[name])return;
- categories[name]=[];
- order.push(name);
- createFrame(name);
- renderCategories();
- detectActiveFrame();
+ if(!name)return;
+ categories.push({name,items:[]});
+ render();
 };
 
-function createFrame(name){
- const f=document.createElement("div");
- f.className="main-frame inactive-frame";
- f.innerHTML=`<div class="frame-title">${name}</div><div class="item-list"></div><button class="add-btn">＋</button>`;
- frameTrack.appendChild(f);
-}
-
-function renderCategories(){
+function render(){
+ frameTrack.innerHTML="";
  categoryList.innerHTML="";
- order.forEach((n,i)=>{
-  const d=document.createElement("div");
-  d.className="category-item";
-  d.textContent=n;
-  d.onclick=()=>frameTrack.children[i].scrollIntoView({behavior:"smooth",inline:"center"});
-  categoryList.appendChild(d);
+ categories.forEach((cat,i)=>{
+   const li=document.createElement("li");
+   li.innerText=cat.name;
+   categoryList.appendChild(li);
+
+   const frame=document.createElement("div");
+   frame.className="frame";
+   cat.items.forEach(it=>{
+     const d=document.createElement("div");
+     d.className="item";
+     d.innerText=`${it.rank}. ${it.name} / ${it.price}`;
+     frame.appendChild(d);
+   });
+   frameTrack.appendChild(frame);
  });
+ activateFrames();
 }
 
-function detectActiveFrame(){
- const frames=document.querySelectorAll(".main-frame");
- const center=window.innerWidth/2;
- let best=null,bestRatio=0;
+function activateFrames(){
+ const frames=[...document.querySelectorAll(".frame")];
+ const w=window.innerWidth;
  frames.forEach(f=>{
-  const r=f.getBoundingClientRect();
-  const v=Math.min(r.right,center*1.5)-Math.max(r.left,center*0.5);
-  const ratio=v/r.width;
-  if(ratio>bestRatio){bestRatio=ratio;best=f;}
+   const r=f.getBoundingClientRect();
+   const visible=Math.min(w,r.right)-Math.max(0,r.left);
+   f.classList.toggle("active",visible> w*0.5);
  });
- frames.forEach(f=>f.classList.add("inactive-frame"));
- if(best)best.classList.remove("inactive-frame");
 }
-
-frameTrack.addEventListener("scroll",detectActiveFrame);
-window.addEventListener("resize",detectActiveFrame);
-});
+frameMask.addEventListener("scroll",activateFrames);
