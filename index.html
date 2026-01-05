@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>MY BUY RANK</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>MY BUY RANK</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
@@ -22,8 +22,16 @@
   <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
 </div>
 
-<div class="frame-mask">
-  <div class="frame-track" id="frameTrack"></div>
+<div class="frame-mask" id="frameMask">
+  <div class="frame-track" id="frameTrack">
+    <div class="frame side-frame"></div>
+    <div class="frame main-frame" id="mainFrame">
+      <div class="frame-title" id="frameTitle">Select Category</div>
+      <div class="item-list" id="itemList"></div>
+      <button class="add-btn" id="openPopup">＋</button>
+    </div>
+    <div class="frame side-frame"></div>
+  </div>
 </div>
 
 <div class="popup-overlay" id="popup">
