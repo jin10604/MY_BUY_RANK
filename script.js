@@ -1,14 +1,16 @@
 const categoryList = document.getElementById("categoryList");
 const addCategoryBtn = document.getElementById("addCategoryBtn");
-const frameTrack = document.getElementById("frameTrack");
-const viewport = document.getElementById("frameViewport");
+const viewport = document.getElementById("viewport");
+const track = document.getElementById("track");
 
 let categories = [];
 let currentIndex = 0;
-let isDragging = false;
+let frameWidth = viewport.offsetWidth;
 let startX = 0;
 let currentTranslate = 0;
+let isDragging = false;
 
+/* 카테고리 추가 */
 addCategoryBtn.onclick = () => {
   const name = prompt("카테고리 이름");
   if (!name) return;
@@ -16,38 +18,41 @@ addCategoryBtn.onclick = () => {
   categories.push(name);
   renderCategories();
   renderFrames();
-  moveTo(categories.length - 1);
+  snapTo(categories.length - 1);
 };
 
+/* 사이드바 */
 function renderCategories() {
   categoryList.innerHTML = "";
   categories.forEach((c, i) => {
     const div = document.createElement("div");
     div.textContent = c;
     div.style.cursor = "pointer";
-    div.onclick = () => moveTo(i);
+    div.onclick = () => snapTo(i);
     categoryList.appendChild(div);
   });
 }
 
+/* 프레임 생성 */
 function renderFrames() {
-  frameTrack.innerHTML = "";
+  track.innerHTML = "";
   categories.forEach(name => {
-    const frame = document.createElement("div");
-    frame.className = "frame";
-    frame.textContent = name;
-    frameTrack.appendChild(frame);
+    const f = document.createElement("div");
+    f.className = "frame";
+    f.textContent = name;
+    track.appendChild(f);
   });
 }
 
-function moveTo(index) {
-  currentIndex = index;
-  currentTranslate = -index * 340;
-  frameTrack.style.transform = `translateX(${currentTranslate}px)`;
+/* 중앙 스냅 */
+function snapTo(index) {
+  frameWidth = viewport.offsetWidth;
+  currentIndex = Math.max(0, Math.min(index, categories.length - 1));
+  currentTranslate = -currentIndex * frameWidth;
+  track.style.transform = `translateX(${currentTranslate}px)`;
 }
 
-/* Drag Slide */
-
+/* 드래그 */
 viewport.addEventListener("mousedown", e => {
   isDragging = true;
   startX = e.clientX;
@@ -58,15 +63,17 @@ window.addEventListener("mouseup", e => {
   isDragging = false;
 
   const moved = e.clientX - startX;
+  if (moved < -frameWidth / 4 && currentIndex < categories.length - 1) currentIndex++;
+  if (moved > frameWidth / 4 && currentIndex > 0) currentIndex--;
 
-  if (moved < -80 && currentIndex < categories.length - 1) currentIndex++;
-  if (moved > 80 && currentIndex > 0) currentIndex--;
-
-  moveTo(currentIndex);
+  snapTo(currentIndex);
 });
 
 viewport.addEventListener("mousemove", e => {
   if (!isDragging) return;
   const delta = e.clientX - startX;
-  frameTrack.style.transform = `translateX(${currentTranslate + delta}px)`;
+  track.style.transform = `translateX(${currentTranslate + delta}px)`;
 });
+
+/* 반응형 대응 */
+window.addEventListener("resize", () => snapTo(currentIndex));
