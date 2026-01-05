@@ -1,50 +1,60 @@
-let categories = {};
-let order = [];
-let currentIndex = 0;
+const categoryList = document.getElementById("category-list");
+const frameTrack = document.getElementById("frame-track");
+const addCategoryBtn = document.getElementById("add-category-btn");
 
-document.addEventListener("DOMContentLoaded", () => {
-
-const navPanel = document.getElementById("navPanel");
-const openNav = document.getElementById("openNav");
-const closeNav = document.getElementById("closeNav");
-const categoryList = document.getElementById("categoryList");
-const addCategoryBtn = document.getElementById("addCategoryBtn");
-const frameTrack = document.getElementById("frameTrack");
-const frameMask = document.getElementById("frameMask");
-const frameTitle = document.getElementById("frameTitle");
-const list = document.getElementById("itemList");
-
-openNav.onclick = () => navPanel.classList.add("active");
-closeNav.onclick = () => navPanel.classList.remove("active");
+let categories = [];
+let activeIndex = 0;
 
 addCategoryBtn.onclick = () => {
-  const name = prompt("Category name?");
-  if(!name || categories[name]) return;
-  categories[name] = [];
-  order.push(name);
+  const name = prompt("카테고리 이름");
+  if(!name) return;
+  categories.push(name);
   renderCategories();
-  slideTo(order.length-1);
+  createFrame(name);
+  activeIndex = categories.length - 1;
+  updateFramePosition();
 };
 
-function renderCategories(){
-  categoryList.innerHTML="";
-  order.forEach((name,i)=>{
-    const div=document.createElement("div");
-    div.className="category-item";
-    div.textContent=name;
-    div.onclick=()=>slideTo(i);
-    categoryList.appendChild(div);
+function renderCategories() {
+  categoryList.innerHTML = "";
+  categories.forEach((c, i) => {
+    const li = document.createElement("li");
+    li.innerText = c;
+    li.onclick = () => {
+      activeIndex = i;
+      updateFramePosition();
+    };
+    categoryList.appendChild(li);
   });
 }
 
-function slideTo(index){
-  currentIndex=index;
-  const frames = document.querySelectorAll(".main-frame");
-  const target = frames[0];   // 메인 프레임 고정
-  const center = frameMask.clientWidth/2 - target.clientWidth/2;
-  const offset = index * (target.clientWidth + 40);
-  frameTrack.style.transform = `translateX(${center - offset}px)`;
-  frameTitle.textContent = order[index];
+function createFrame(name) {
+  const frame = document.createElement("div");
+  frame.className = "buy-frame";
+  frame.innerHTML = `
+    <h3>${name}</h3>
+    <div class="item-list"></div>
+    <button class="add-item-btn">+</button>
+    <div class="item-input-container hidden">
+      <input placeholder="Rank">
+      <input placeholder="Product">
+      <textarea placeholder="Memo"></textarea>
+      <input placeholder="Price">
+      <button class="cancel">Cancel</button>
+    </div>
+  `;
+
+  frame.querySelector(".add-item-btn").onclick = () => {
+    frame.querySelector(".item-input-container").classList.toggle("hidden");
+  };
+
+  frame.querySelector(".cancel").onclick = () => {
+    frame.querySelector(".item-input-container").classList.add("hidden");
+  };
+
+  frameTrack.appendChild(frame);
 }
 
-});
+function updateFramePosition() {
+  frameTrack.style.transform = `translateX(-${activeIndex * 380}px)`;
+}
