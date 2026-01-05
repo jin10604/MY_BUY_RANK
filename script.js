@@ -1,111 +1,61 @@
 let categories = {};
 let order = [];
 let currentIndex = 0;
-let editTarget = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-
   const navPanel = document.getElementById("navPanel");
-  const openNav = document.getElementById("openNav");
-  const closeNav = document.getElementById("closeNav");
-  const categoryList = document.getElementById("categoryList");
-  const addCategoryBtn = document.getElementById("addCategoryBtn");
-
-  const frameTrack = document.getElementById("frameTrack");
-  const frameTitle = document.getElementById("frameTitle");
-  const list = document.getElementById("itemList");
-
-  const popup = document.getElementById("popup");
-  const openBtn = document.getElementById("openPopup");
-  const closeBtn = document.getElementById("closePopup");
-  const addBtn = document.getElementById("addItemBtn");
-  const deleteBtn = document.getElementById("deleteItemBtn");
-
   openNav.onclick = () => navPanel.classList.add("active");
   closeNav.onclick = () => navPanel.classList.remove("active");
 
   addCategoryBtn.onclick = () => {
     const name = prompt("Category name?");
-    if (!name || categories[name]) return;
-    categories[name] = [];
+    if(!name || categories[name]) return;
+    categories[name]=[];
     order.push(name);
+    createFrame(name);
     renderCategories();
-    slideTo(order.length - 1);
+    detectActiveFrame();
   };
 
   function renderCategories(){
     categoryList.innerHTML="";
-    order.forEach((name,i)=>{
-      const div=document.createElement("div");
-      div.className="category-item";
-      div.textContent=name;
-      div.onclick=()=>slideTo(i);
-      categoryList.appendChild(div);
+    order.forEach((n,i)=>{
+      const d=document.createElement("div");
+      d.className="category-item";
+      d.textContent=n;
+      d.onclick=()=>scrollToFrame(i);
+      categoryList.appendChild(d);
     });
   }
 
-  function slideTo(index){
-    currentIndex=index;
-    frameTrack.style.transform=`translateX(${-370*index}px)`;
-    frameTitle.textContent=order[index] || "Select Category";
-    renderItems();
+  function createFrame(name){
+    const frame=document.createElement("div");
+    frame.className="frame main-frame inactive-frame";
+    frame.innerHTML=`<div class="frame-title">${name}</div><div class="item-list"></div>`;
+    frameTrack.appendChild(frame);
   }
 
-  openBtn.onclick=()=>{
-    popup.style.display="flex";
-    editTarget=null;
-    deleteBtn.style.display="none";
-    clearInputs();
-  };
-
-  closeBtn.onclick=()=>popup.style.display="none";
-
-  addBtn.onclick=()=>{
-    const cat=order[currentIndex];
-    if(!cat)return;
-    const r=rank.value.trim();
-    if(!r)return alert("Rank required");
-
-    if(categories[cat].some(i=>i.dataset.rank===r && i!==editTarget)){
-      alert("Duplicate rank");return;
-    }
-
-    let card=editTarget||document.createElement("div");
-    card.className="item-card";
-    card.dataset.rank=r;
-    card.innerHTML=`<div class="rank-badge">${r}</div><div class="edit-btn">✎</div>
-    <div>${productName.value}</div><div class="memo-text">${memo.value}</div>`;
-    card.querySelector(".edit-btn").onclick=()=>openEdit(card);
-
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    categories[cat].push(card);
-    categories[cat].sort((a,b)=>a.dataset.rank-b.dataset.rank);
-    renderItems();
-    popup.style.display="none";
-  };
-
-  deleteBtn.onclick=()=>{
-    const cat=order[currentIndex];
-    categories[cat]=categories[cat].filter(i=>i!==editTarget);
-    renderItems();
-    popup.style.display="none";
-  };
-
-  function openEdit(card){
-    editTarget=card;
-    rank.value=card.dataset.rank;
-    popup.style.display="flex";
-    deleteBtn.style.display="block";
+  function scrollToFrame(i){
+    const f=document.querySelectorAll(".main-frame")[i];
+    f.scrollIntoView({behavior:"smooth",inline:"center"});
   }
 
-  function renderItems(){
-    list.innerHTML="";
-    const cat=order[currentIndex];
-    if(!categories[cat])return;
-    categories[cat].forEach(c=>list.appendChild(c));
+  function detectActiveFrame(){
+    const frames=document.querySelectorAll(".main-frame");
+    const center=window.innerWidth/2;
+    let best=null,bestRatio=0;
+
+    frames.forEach(f=>{
+      const r=f.getBoundingClientRect();
+      const v=Math.min(r.right,center*1.5)-Math.max(r.left,center*0.5);
+      const ratio=v/r.width;
+      if(ratio>bestRatio){bestRatio=ratio;best=f;}
+    });
+
+    frames.forEach(f=>f.classList.add("inactive-frame"));
+    if(best) best.classList.remove("inactive-frame");
   }
 
-  function clearInputs(){
-    rank.value=productName.value=price.value=memo.value=image.value="";
-  }
+  window.addEventListener("scroll",detectActiveFrame);
+  window.addEventListener("resize",detectActiveFrame);
 });
