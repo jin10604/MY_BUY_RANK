@@ -3,39 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <title>MY BUY RANK</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="app">
+<div class="app">
 
-<header class="top-bar">
-  <button id="openNav">☰</button>
-  <span>MY BUY RANK</span>
+<header class="header">
+  <button class="nav-btn" id="openNav">☰</button>
+  <h1>MY BUY RANK</h1>
 </header>
 
-<nav id="sideNav">
+<div class="nav-panel" id="navPanel">
   <div class="nav-header">
     <span>CATEGORY</span>
-    <button id="closeNav">✕</button>
+    <button class="close-nav" id="closeNav">✕</button>
   </div>
-  <button id="addCategory">＋ Add Category</button>
-  <ul id="categoryList"></ul>
-</nav>
+  <div class="category-list" id="categoryList"></div>
+  <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
+</div>
 
-<main id="frameMask">
-  <div id="frameTrack"></div>
-</main>
+<div class="frame-mask">
+  <div class="frame-track" id="frameTrack"></div>
+</div>
 
-<div id="itemPopup" class="popup hidden">
+<div class="popup-overlay" id="popup">
   <div class="popup-card">
-    <input id="itemRank" placeholder="Rank">
-    <input id="itemName" placeholder="Product Name">
-    <input id="itemPrice" placeholder="Price">
-    <textarea id="itemMemo" placeholder="Memo"></textarea>
+    <input type="number" id="rank" placeholder="Rank">
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="text" id="price" placeholder="Price">
+    <textarea id="memo" placeholder="Memo"></textarea>
+    <input type="file" id="image">
     <div class="popup-actions">
-      <button id="saveItem">Save</button>
-      <button id="deleteItem">Delete</button>
+      <button id="addItemBtn">Add</button>
+      <button id="deleteItemBtn">Delete</button>
       <button id="closePopup">Cancel</button>
     </div>
   </div>
