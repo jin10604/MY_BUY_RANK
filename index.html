@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>MY BUY RANK</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="app">
 
-<div class="layout">
-  <aside class="sidebar">
-    <h3>Category</h3>
-    <div id="categoryList"></div>
-    <button id="addCategoryBtn">+ Add Category</button>
-  </aside>
+    <aside id="sidebar">
+      <h2>Category</h2>
+      <ul id="categoryList"></ul>
+      <button id="addCategoryBtn">+ Add Category</button>
+    </aside>
 
-  <main class="main">
-    <div id="viewport">
-      <div id="track"></div>
-    </div>
-  </main>
-</div>
+    <main id="main">
+      <div id="viewport">
+        <div id="track"></div>
+      </div>
+      <button id="addItemBtn">＋</button>
+    </main>
 
-<script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
