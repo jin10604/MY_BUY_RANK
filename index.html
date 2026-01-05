@@ -1,55 +1,30 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>MY BUY RANK</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>MY BUY RANK</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
 
-<header class="header">
-  <button class="nav-btn" id="openNav">☰</button>
-  <h1>MY BUY RANK</h1>
-</header>
+<div id="app">
 
-<div class="nav-panel" id="navPanel">
-  <div class="nav-header">
-    <span>CATEGORY</span>
-    <button class="close-nav" id="closeNav">✕</button>
-  </div>
-  <div class="category-list" id="categoryList"></div>
-  <button class="add-category" id="addCategoryBtn">＋ Add Category</button>
-</div>
+  <aside id="category-panel">
+    <h3>CATEGORY</h3>
+    <ul id="category-list"></ul>
+    <button id="add-category-btn">+ Add Category</button>
+  </aside>
 
-<div class="frame-mask" id="frameMask">
-  <div class="frame-track" id="frameTrack">
-    <div class="frame side-frame"></div>
-    <div class="frame main-frame" id="mainFrame">
-      <div class="frame-title" id="frameTitle">Select Category</div>
-      <div class="item-list" id="itemList"></div>
-      <button class="add-btn" id="openPopup">＋</button>
+  <main id="main-panel">
+    <h2 class="app-title">MY BUY RANK</h2>
+
+    <div id="frame-viewport">
+      <div id="frame-track"></div>
     </div>
-    <div class="frame side-frame"></div>
-  </div>
-</div>
-
-<div class="popup-overlay" id="popup">
-  <div class="popup-card">
-    <input type="number" id="rank" placeholder="Rank">
-    <input type="text" id="productName" placeholder="Product Name">
-    <input type="text" id="price" placeholder="Price">
-    <textarea id="memo" placeholder="Memo"></textarea>
-    <input type="file" id="image">
-    <div class="popup-actions">
-      <button id="addItemBtn">Add</button>
-      <button id="deleteItemBtn">Delete</button>
-      <button id="closePopup">Cancel</button>
-    </div>
-  </div>
-</div>
+  </main>
 
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
