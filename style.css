@@ -1,78 +1,72 @@
 body {
-  margin: 0;
-  background: #f4f6f8;
+  margin:0;
+  background:#f2f3f7;
   font-family: system-ui;
 }
 
-#app {
-  display: flex;
-  height: 100vh;
-}
+#app { display:flex; height:100vh; }
 
 #category-panel {
-  width: 220px;
-  background: #fff;
-  padding: 16px;
-  box-shadow: 4px 0 12px rgba(0,0,0,0.05);
+  width:240px;
+  padding:20px;
+  background:#f2f3f7;
+  box-shadow: inset -6px -6px 12px #fff,
+              inset 6px 6px 12px #d1d9e6;
 }
 
 #category-list li {
-  background: #f0f2f5;
-  margin-bottom: 8px;
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
+  background:#f2f3f7;
+  margin-bottom:10px;
+  padding:12px;
+  border-radius:14px;
+  box-shadow: -4px -4px 8px #fff,
+               4px 4px 8px #d1d9e6;
+  cursor:pointer;
 }
 
 #main-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
-.app-title {
-  margin: 20px 0;
-}
+.title { margin:20px; }
 
 #frame-viewport {
-  width: 360px;
-  height: 520px;
-  overflow: hidden;
+  width:360px;
+  height:540px;
+  overflow:hidden;
 }
 
 #frame-track {
-  display: flex;
-  transition: transform .35s ease;
+  display:flex;
+  transition:transform .4s ease;
 }
 
 .buy-frame {
-  min-width: 360px;
-  height: 520px;
-  background: #eef1f4;
-  border-radius: 24px;
-  margin-right: 20px;
-  position: relative;
-  padding: 20px;
+  min-width:360px;
+  height:540px;
+  background:#f2f3f7;
+  border-radius:30px;
+  margin-right:24px;
+  padding:20px;
+  box-shadow:-8px -8px 16px #fff,
+              8px 8px 16px #d1d9e6;
+  position:relative;
 }
 
-.add-item-btn {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: none;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
+.add-btn {
+  position:absolute;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  font-size:20px;
+  background:#f2f3f7;
+  box-shadow:-4px -4px 8px #fff,
+              4px 4px 8px #d1d9e6;
 }
-
-.item-input-container {
-  position: absolute;
-  bottom: 70px;
-  width: 90%;
-  left: 5%;
-}
-
-.hidden { display: none; }
