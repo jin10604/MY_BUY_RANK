@@ -1,45 +1,52 @@
-const nav=document.getElementById("sideNav");
-openNav.onclick=()=>nav.classList.add("active");
-closeNav.onclick=()=>nav.classList.remove("active");
+let categories = {};
+let order = [];
+let currentIndex = 0;
 
-const frameTrack=document.getElementById("frameTrack");
-const categories=[];
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("addCategory").onclick=()=>{
- const name=prompt("Category name?");
- if(!name)return;
- categories.push({name,items:[]});
- render();
+const navPanel = document.getElementById("navPanel");
+const openNav = document.getElementById("openNav");
+const closeNav = document.getElementById("closeNav");
+const categoryList = document.getElementById("categoryList");
+const addCategoryBtn = document.getElementById("addCategoryBtn");
+const frameTrack = document.getElementById("frameTrack");
+
+openNav.onclick=()=>navPanel.classList.add("active");
+closeNav.onclick=()=>navPanel.classList.remove("active");
+
+addCategoryBtn.onclick=()=>{
+  const name=prompt("Category name?");
+  if(!name||categories[name])return;
+  categories[name]=[];
+  order.push(name);
+  createFrame(name);
+  renderCategories();
+  slideTo(order.length-1);
 };
 
-function render(){
- frameTrack.innerHTML="";
- categoryList.innerHTML="";
- categories.forEach((cat,i)=>{
-   const li=document.createElement("li");
-   li.innerText=cat.name;
-   categoryList.appendChild(li);
-
-   const frame=document.createElement("div");
-   frame.className="frame";
-   cat.items.forEach(it=>{
-     const d=document.createElement("div");
-     d.className="item";
-     d.innerText=`${it.rank}. ${it.name} / ${it.price}`;
-     frame.appendChild(d);
-   });
-   frameTrack.appendChild(frame);
- });
- activateFrames();
+function renderCategories(){
+  categoryList.innerHTML="";
+  order.forEach((n,i)=>{
+    const d=document.createElement("div");
+    d.className="category-item";
+    d.textContent=n;
+    d.onclick=()=>slideTo(i);
+    categoryList.appendChild(d);
+  });
 }
 
-function activateFrames(){
- const frames=[...document.querySelectorAll(".frame")];
- const w=window.innerWidth;
- frames.forEach(f=>{
-   const r=f.getBoundingClientRect();
-   const visible=Math.min(w,r.right)-Math.max(0,r.left);
-   f.classList.toggle("active",visible> w*0.5);
- });
+function createFrame(name){
+  const f=document.createElement("div");
+  f.className="frame main-frame";
+  f.innerHTML=`<div class="frame-title">${name}</div>
+  <div class="item-list"></div>
+  <button class="add-btn">＋</button>`;
+  frameTrack.appendChild(f);
 }
-frameMask.addEventListener("scroll",activateFrames);
+
+function slideTo(i){
+  currentIndex=i;
+  frameTrack.style.transform=`translateX(${-370*i}px)`;
+}
+
+});
