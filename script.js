@@ -1,7 +1,6 @@
-let categories={}, order=[], currentIndex=0;
+let categories={},order=[],currentIndex=0;
 
 document.addEventListener("DOMContentLoaded",()=>{
-const navPanel=navPanel=document.getElementById("navPanel");
 openNav.onclick=()=>navPanel.classList.add("active");
 closeNav.onclick=()=>navPanel.classList.remove("active");
 
