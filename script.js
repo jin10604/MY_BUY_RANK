@@ -2,78 +2,78 @@ const categoryList = document.getElementById("categoryList");
 const addCategoryBtn = document.getElementById("addCategoryBtn");
 const viewport = document.getElementById("viewport");
 const track = document.getElementById("track");
+const addItemBtn = document.getElementById("addItemBtn");
 
 let categories = [];
 let currentIndex = 0;
-let frameWidth = viewport.offsetWidth;
+
+let isDragging = false;
 let startX = 0;
 let currentTranslate = 0;
-let isDragging = false;
 
-/* 카테고리 추가 */
-addCategoryBtn.onclick = () => {
-  const name = prompt("카테고리 이름");
-  if (!name) return;
+function getFrameWidth() {
+  return viewport.getBoundingClientRect().width;
+}
 
-  categories.push(name);
-  renderCategories();
-  renderFrames();
-  snapTo(categories.length - 1);
-};
+function createFrame(name) {
+  const frame = document.createElement("div");
+  frame.className = "frame";
+  frame.textContent = name;
+  return frame;
+}
 
-/* 사이드바 */
-function renderCategories() {
+function render() {
   categoryList.innerHTML = "";
-  categories.forEach((c, i) => {
-    const div = document.createElement("div");
-    div.textContent = c;
-    div.style.cursor = "pointer";
-    div.onclick = () => snapTo(i);
-    categoryList.appendChild(div);
-  });
-}
-
-/* 프레임 생성 */
-function renderFrames() {
   track.innerHTML = "";
-  categories.forEach(name => {
-    const f = document.createElement("div");
-    f.className = "frame";
-    f.textContent = name;
-    track.appendChild(f);
+
+  categories.forEach((cat, idx) => {
+    const li = document.createElement("li");
+    li.textContent = cat;
+    li.onclick = () => snapTo(idx);
+    categoryList.appendChild(li);
+
+    track.appendChild(createFrame(cat));
   });
+
+  snapTo(currentIndex);
 }
 
-/* 중앙 스냅 */
 function snapTo(index) {
-  frameWidth = viewport.offsetWidth;
+  const width = getFrameWidth();
   currentIndex = Math.max(0, Math.min(index, categories.length - 1));
-  currentTranslate = -currentIndex * frameWidth;
+  currentTranslate = -currentIndex * width;
   track.style.transform = `translateX(${currentTranslate}px)`;
 }
 
-/* 드래그 */
+addCategoryBtn.onclick = () => {
+  const name = prompt("카테고리 이름");
+  if (!name) return;
+  categories.push(name);
+  render();
+};
+
 viewport.addEventListener("mousedown", e => {
   isDragging = true;
   startX = e.clientX;
+});
+
+window.addEventListener("mousemove", e => {
+  if (!isDragging) return;
+  const diff = e.clientX - startX;
+  track.style.transform = `translateX(${currentTranslate + diff}px)`;
 });
 
 window.addEventListener("mouseup", e => {
   if (!isDragging) return;
   isDragging = false;
 
-  const moved = e.clientX - startX;
-  if (moved < -frameWidth / 4 && currentIndex < categories.length - 1) currentIndex++;
-  if (moved > frameWidth / 4 && currentIndex > 0) currentIndex--;
+  const diff = e.clientX - startX;
+  const width = getFrameWidth();
+
+  if (diff < -width / 4 && currentIndex < categories.length - 1) currentIndex++;
+  if (diff > width / 4 && currentIndex > 0) currentIndex--;
 
   snapTo(currentIndex);
 });
 
-viewport.addEventListener("mousemove", e => {
-  if (!isDragging) return;
-  const delta = e.clientX - startX;
-  track.style.transform = `translateX(${currentTranslate + delta}px)`;
-});
-
-/* 반응형 대응 */
 window.addEventListener("resize", () => snapTo(currentIndex));
